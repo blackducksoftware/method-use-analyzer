@@ -15,7 +15,20 @@ allprojects {
 
 subprojects {
     apply plugin: 'java-library'
-    // TODO apply plugin: 'checkstyle'
+    apply plugin: 'checkstyle'
+    apply plugin: 'maven-publish'
+    
+    checkstyle {
+        configFile = rootProject.file('config/checkstyle/checkstyle.xml')
+        configProperties = [ 'checkstyle.config.dir' : rootProject.file('config/checkstyle') ]
+        toolVersion = '8.27'
+    }
+     
+    task checkstyleAll{}
+     
+    tasks.withType(Checkstyle).all { checkstyleTask -> checkstyleAll.dependsOn checkstyleTask }
+     
+    check.dependsOn checkstyleAll
     
     // Setup default test behavior, including failure logging
     test {
@@ -31,4 +44,13 @@ subprojects {
             include 'LICENSE'
         }
     }
+    
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                from components.java
+            }
+        }
+    }
+    
 }

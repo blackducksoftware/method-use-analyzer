@@ -9,7 +9,34 @@ This library is currently in ALPHA, and will proceed to GA with the following gu
 
 ## Use
 
-TODO
+To use this library, it must be added as a dependency reference, and then invoked within the consuming project:
+
+### Dependency Reference
+
+This library is in ALPHA - it is currently necessary to download this repository and run `./gradlew clean build publish` to load the built jar into your local maven repository, and then add the following to your Gradle configuration:
+
+```
+repositories {
+    mavenLocal()
+}
+
+dependencies {
+	compile 'com.synopsys:method-analyzer-core:0.1.0-SNAPSHOT'
+}
+```
+
+The GA version of this library will be available via more standard repositories, such as Maven Central
+
+### Analysis Execution
+
+The primary use of the method analyzer is to find external method calls from a given set of class files, and create a report of them. This can be done via:
+
+```
+MethodUseAnalyzer analyzer = new MethodUseAnalyzer();
+Path outputReportFile = analyzer.analyze(sourceDirectoryPath, outputDirectoryPath);
+```
+
+Where `sourceDirectoryPath` is the directory containing (either directly, or recursively) the Java `*.class` files to analyze, and `outputDirectoryPath` is the directory to save the report to. A custom name for the report may be specified via the `MethodUseAnalyzer.analyze(Path, Path, String)` function, in place of `MethodUseAnalyzer.analyze(Path, Path)`
 
 ## Contributing
 

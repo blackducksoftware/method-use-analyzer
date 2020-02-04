@@ -1,0 +1,6 @@
+dependencies {
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.guava:guava:28.1-jre'
+    implementation 'org.ow2.asm:asm:7.2'
+    implementation 'org.slf4j:slf4j-api:1.7.26'
+}
