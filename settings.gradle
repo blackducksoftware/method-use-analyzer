@@ -1,0 +1,4 @@
+rootProject.name = 'method-use-analyzer'
+
+include 'method-analyzer-core'
+include 'method-analyzer-test-project'
