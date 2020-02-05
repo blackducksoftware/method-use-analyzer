@@ -23,14 +23,37 @@
 package com.synopsys.method.analyzer.core;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.objectweb.asm.ClassReader;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Multimap;
+import com.synopsys.method.analyzer.core.bytecode.ClassMethodReferenceVisitor;
+import com.synopsys.method.analyzer.core.model.ReferencedMethod;
 
-// TODO romeara doc
+/**
+ * Represents functionality to analyze and report on the external method calls made within a Java project
+ *
+ * <p>
+ * This class is intended as the primary use interface for method analysis operations. Both {@link #analyze(Path, Path)}
+ * and {@link #analyze(Path, Path, String)} may be used to evaluate and report on a target directory's use of methods
+ * which are defined within the given directory
+ *
+ * @author romeara
+ */
 public class MethodUseAnalyzer {
+
+    /**
+     * Regular expression intended to match files with the ".class" extension
+     */
+    private static final String CLASS_FILE_REGEX = ".*\\.class";
 
     /**
      * Analyzes Java *.class files with the provided {@code sourceDirectory} for method calls made to classes not
@@ -66,14 +89,34 @@ public class MethodUseAnalyzer {
      *             If there is an error reading from input files, or saving the output report
      */
     public Path analyze(Path sourceDirectory, Path outputDirectory, String outputFileName) throws IOException {
-        Objects.requireNonNull(sourceDirectory);
-        Objects.requireNonNull(outputDirectory);
-        Objects.requireNonNull(outputFileName);
+        Objects.requireNonNull(sourceDirectory, "The sourceDirectory parameter is required, and may not be null");
+        Objects.requireNonNull(outputDirectory, "The outputDirectory parameter is required, and may not be null");
+        Objects.requireNonNull(outputFileName, "The outputFileName parameter is required, and may not be null");
 
         Preconditions.checkArgument(Files.exists(sourceDirectory), "The source path provided (%s) does not exist", sourceDirectory.toString());
         Preconditions.checkArgument(Files.isDirectory(sourceDirectory), "The source path provided (%s) is not a directory", sourceDirectory.toString());
 
-        // TODO Auto-generated function stub
+        Multimap<ReferencedMethod, String> references = null;
+
+        try (Stream<Path> files = Files.walk(sourceDirectory)) {
+            List<Path> classFiles = files
+                    .filter(Files::isRegularFile)
+                    .filter(f -> f.toString().matches(CLASS_FILE_REGEX))
+                    .collect(Collectors.toList());
+
+            ClassMethodReferenceVisitor bytecodeAnalyzer = new ClassMethodReferenceVisitor();
+
+            for (Path classFile : classFiles) {
+                try (InputStream inputStream = Files.newInputStream(classFile)) {
+                    ClassReader reader = new ClassReader(inputStream);
+                    reader.accept(bytecodeAnalyzer, 0);
+                }
+            }
+
+            references = bytecodeAnalyzer.getReferences();
+        }
+
+        // TODO Create a report
         throw new UnsupportedOperationException("MethodUseAnalyzer.analyze is not yet implemented");
     }
 

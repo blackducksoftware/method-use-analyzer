@@ -2,5 +2,16 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.google.guava:guava:28.1-jre'
     implementation 'org.ow2.asm:asm:7.2'
-    implementation 'org.slf4j:slf4j-api:1.7.26'
+    implementation 'org.slf4j:slf4j-api:1.7.29'
+    
+    testImplementation project(':method-analyzer-test-project')
+    testImplementation 'org.slf4j:slf4j-simple:1.7.29'
+    testImplementation 'org.testng:testng:6.14.3'
+}
+
+// TODO romeara Add to contribution doc
+// Configure tests with directory for test project
+// This requires setting up TestNG run/debug properties within IDE imports to execute tests
+test {
+    systemProperty 'com.synopsys.method.analyzer.test.project.dir', "${project(':method-analyzer-test-project').projectDir}"
 }
