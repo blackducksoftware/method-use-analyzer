@@ -1,2 +1,0 @@
-# Global File Owners
-*       @romeara @nickavv @WyattPearson @hanguyen304
