@@ -1,0 +1,24 @@
+language: java
+sudo: false
+install: true
+
+### only trusty has oraclejdk8 reliably
+dist: trusty
+
+jdk:
+- oraclejdk8
+
+notifications:
+  email:
+    recipients:
+    - romeara@synopsys.com
+
+script:
+- "./gradlew clean build"
+
+cache:
+  directories:
+  - "$HOME/.m2/repository"
+  - "$HOME/.sonar/cache"
+  - "$HOME/.gradle"
+  - ".gradle"
