@@ -22,6 +22,9 @@
  */
 package com.synopsys.method.analyzer.test.project;
 
+import java.util.Collections;
+import java.util.stream.Collectors;
+
 public class BasicTestClass {
 
     public final String string = System.getProperty("will.be.null");
@@ -34,6 +37,12 @@ public class BasicTestClass {
 
     private String getInternal() {
         return "internal";
+    }
+
+    public Long getDynamic() {
+        return Collections.singletonList("s").stream()
+                .map(String::toUpperCase)
+                .collect(Collectors.counting());
     }
 
 }
