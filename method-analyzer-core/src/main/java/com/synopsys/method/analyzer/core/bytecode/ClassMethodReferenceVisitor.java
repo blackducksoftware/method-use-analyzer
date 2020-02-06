@@ -30,6 +30,8 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.ConstantDynamic;
+import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -147,13 +149,41 @@ public class ClassMethodReferenceVisitor extends ClassVisitor {
             super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
         }
 
-        // TODO romeara dynamic references (lambda references)
+        @Override
+        public void visitInvokeDynamicInsn(
+                final String name,
+                final String descriptor,
+                final Handle bootstrapMethodHandle,
+                final Object... bootstrapMethodArguments) {
+            register(bootstrapMethodHandle.getOwner(), name, bootstrapMethodHandle.getDesc());
+
+            for (Object methodArgument : bootstrapMethodArguments) {
+                registerMethodArgument(methodArgument);
+            }
+        }
 
         @Override
         public void visitEnd() {
             currentLine = null;
 
             super.visitEnd();
+        }
+
+        private void registerMethodArgument(Object methodArgument) {
+            if (methodArgument instanceof Handle) {
+                Handle handleArgument = (Handle) methodArgument;
+
+                register(handleArgument.getOwner(), handleArgument.getName(), handleArgument.getDesc());
+            } else if (methodArgument instanceof ConstantDynamic) {
+                ConstantDynamic constantDyanmicArgument = (ConstantDynamic) methodArgument;
+
+                register(constantDyanmicArgument.getBootstrapMethod().getOwner(), constantDyanmicArgument.getBootstrapMethod().getName(),
+                        constantDyanmicArgument.getBootstrapMethod().getDesc());
+
+                for (int i = 0; i < constantDyanmicArgument.getBootstrapMethodArgumentCount(); i++) {
+                    registerMethodArgument(constantDyanmicArgument.getBootstrapMethodArgument(i));
+                }
+            }
         }
 
         private void register(String owner, String name, String descriptor) {
