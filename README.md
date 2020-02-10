@@ -38,6 +38,10 @@ Path outputReportFile = analyzer.analyze(sourceDirectoryPath, outputDirectoryPat
 
 Where `sourceDirectoryPath` is the directory containing (either directly, or recursively) the Java `*.class` files to analyze, and `outputDirectoryPath` is the directory to save the report to. A custom name for the report may be specified via the `MethodUseAnalyzer.analyze(Path, Path, String)` function, in place of `MethodUseAnalyzer.analyze(Path, Path)`
 
+### Output
+
+The output of the method use analyzer is a report file, whose formatting is documented [here](./docs/REPORT_FORMAT.md)
+
 ## Contributing
 
 TODO linked doc

@@ -37,6 +37,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Multimap;
 import com.synopsys.method.analyzer.core.bytecode.ClassMethodReferenceVisitor;
 import com.synopsys.method.analyzer.core.model.ReferencedMethod;
+import com.synopsys.method.analyzer.core.report.ReportGenerator;
 
 /**
  * Represents functionality to analyze and report on the external method calls made within a Java project
@@ -97,6 +98,7 @@ public class MethodUseAnalyzer {
         Preconditions.checkArgument(Files.isDirectory(sourceDirectory), "The source path provided (%s) is not a directory", sourceDirectory.toString());
 
         Multimap<ReferencedMethod, String> references = null;
+        ReportGenerator reportGenerator = new ReportGenerator();
 
         try (Stream<Path> files = Files.walk(sourceDirectory)) {
             List<Path> classFiles = files
@@ -116,8 +118,9 @@ public class MethodUseAnalyzer {
             references = bytecodeAnalyzer.getReferences();
         }
 
-        // TODO Create a report
-        throw new UnsupportedOperationException("MethodUseAnalyzer.analyze is not yet implemented");
+        // TODO romeara logging (info/debug) of what was found
+
+        return reportGenerator.generateReport(references, outputDirectory, outputFileName);
     }
 
 }

@@ -41,11 +41,11 @@ import org.testng.annotations.Test;
 import com.google.common.collect.Multimap;
 import com.synopsys.method.analyzer.core.bytecode.ClassMethodReferenceVisitor;
 import com.synopsys.method.analyzer.core.model.ReferencedMethod;
+import com.synopsys.method.analyzer.test.core.TestProperties;
 
 public class ClassMethodReferenceVisitorTest {
 
-    private static final Path TEST_PROJECT_DIRECTORY = Paths
-            .get(System.getProperty("com.synopsys.method.analyzer.test.project.dir"));
+    private static final Path TEST_PROJECT_DIRECTORY = Paths.get(System.getProperty(TestProperties.TEST_PROJECT_DIRECTORY));
 
     private static final String CLASS_FILE_REGEX = ".*\\.class";
 
