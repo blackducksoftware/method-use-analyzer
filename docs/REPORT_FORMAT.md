@@ -8,7 +8,7 @@ The "methods" report(s) are within the `referenced-methods` directory of the exp
 
 ## Method Uses Report
 
-The "method uses" report(s) are within the `referenced-method-uses` directory of the expanded report file. Each of this files is a JSON file, containing several elements:
+The "method uses" report(s) are within the `referenced-method-uses` directory of the expanded report file. Each of these files is a JSON file, containing several elements:
 
 - methodUses[]
   - Array of all references described by this report
