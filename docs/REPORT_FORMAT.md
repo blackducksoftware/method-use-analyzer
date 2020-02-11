@@ -1,6 +1,17 @@
 # Report Format
 
-The canonical use for the library results in an output report. This report is a zip archive with a custom file extension, containing multiple report files. These files are partitioned groups of discovered methods (the number per partition is determined by cloud service constraints). There are currently two types of files - "methods", and "method uses".
+The canonical use for the library results in an output report. This report is a zip archive with a custom file extension, containing multiple report files. These files are partitioned groups of discovered methods (the number per partition is determined by cloud service constraints). There are currently three types of files - "meta data", "methods", and "method uses".
+
+## Meta Data Report
+
+The "meta data" report is located in the root of the report directory of the expanded report file, in the `metaData.json` file. This file contains the following elements:
+
+- hostName
+  - The name of the host the analysis was performed on
+- analyzedDirectory
+  - The local path of the directory analyzed
+- projectName
+  - Optional. A human-readable label for the project/directory analyzed
 
 ## Methods Report
 

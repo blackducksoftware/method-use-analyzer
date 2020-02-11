@@ -66,7 +66,7 @@ public class MethodUseAnalyzerTest {
     public void analyze() throws Exception {
         MethodUseAnalyzer analyzer = new MethodUseAnalyzer();
 
-        Path resultFile = analyzer.analyze(TEST_PROJECT_DIRECTORY, Files.createTempDirectory("blackduck-method-uses-analyzer-test"));
+        Path resultFile = analyzer.analyze(TEST_PROJECT_DIRECTORY, Files.createTempDirectory("blackduck-method-uses-analyzer-test"), null);
 
         Assert.assertNotNull(resultFile);
         Assert.assertTrue(Files.exists(resultFile));
@@ -120,7 +120,7 @@ public class MethodUseAnalyzerTest {
         }
     }
 
-    // TODO utility? sahred with report generator test code
+    // TODO utility? shared with report generator test code
     private Path unzip(Path zipArchive) throws IOException {
         Path outputDirectory = Files.createTempDirectory("blackduck-method-uses-test-output");
 

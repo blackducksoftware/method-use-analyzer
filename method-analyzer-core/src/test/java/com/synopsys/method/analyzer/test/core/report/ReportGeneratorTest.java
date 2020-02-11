@@ -45,6 +45,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
 import com.synopsys.method.analyzer.core.model.ReferencedMethod;
+import com.synopsys.method.analyzer.core.report.MetaDataReportJson;
 import com.synopsys.method.analyzer.core.report.MethodIdsReportJson;
 import com.synopsys.method.analyzer.core.report.MethodReferencesReportJson;
 import com.synopsys.method.analyzer.core.report.ReferencedMethodUsesJson;
@@ -61,7 +62,7 @@ public class ReportGeneratorTest {
     @BeforeClass
     public void setup() throws Exception {
         testReportDirectory = Files.createTempDirectory("blackduck-method-uses-test");
-        reportGenerator = new ReportGenerator();
+        reportGenerator = new ReportGenerator("hostName", "analyzedDirectory", "projectName");
     }
 
     @Test
@@ -76,14 +77,20 @@ public class ReportGeneratorTest {
 
         Path resultExpandedDirectory = unzip(result);
 
+        Path expectedMetaData = resultExpandedDirectory.resolve("metaData.json");
         Path expectedReferencedMethod = resultExpandedDirectory.resolve("referenced-methods").resolve("referenced-methods-0.json");
         Path expectedReferencedMethodUses = resultExpandedDirectory.resolve("referenced-method-uses").resolve("referenced-method-uses-0.json");
 
         Assert.assertTrue(Files.exists(expectedReferencedMethod));
         Assert.assertTrue(Files.exists(expectedReferencedMethodUses));
 
+        MetaDataReportJson metaDataReport = null;
         MethodIdsReportJson methodIdsReport = null;
         MethodReferencesReportJson methodReferencesReport = null;
+
+        try (BufferedReader reader = Files.newBufferedReader(expectedMetaData)) {
+            metaDataReport = GSON.fromJson(reader, MetaDataReportJson.class);
+        }
 
         try (BufferedReader reader = Files.newBufferedReader(expectedReferencedMethod)) {
             methodIdsReport = GSON.fromJson(reader, MethodIdsReportJson.class);
@@ -93,8 +100,13 @@ public class ReportGeneratorTest {
             methodReferencesReport = GSON.fromJson(reader, MethodReferencesReportJson.class);
         }
 
+        Assert.assertNotNull(metaDataReport);
         Assert.assertNotNull(methodIdsReport);
         Assert.assertNotNull(methodReferencesReport);
+
+        Assert.assertEquals(metaDataReport.getHostName(), "hostName");
+        Assert.assertEquals(metaDataReport.getAnalyzedDirectory(), "analyzedDirectory");
+        Assert.assertEquals(metaDataReport.getProjectName(), "projectName");
 
         Map<String, ReferencedMethodUsesJson> usesById = methodReferencesReport.getMethodUses().stream()
                 .collect(Collectors.toMap(use -> use.getMethod().getId(), Functions.identity()));
@@ -128,6 +140,7 @@ public class ReportGeneratorTest {
 
         Path resultExpandedDirectory = unzip(result);
 
+        Path expectedMetaData = resultExpandedDirectory.resolve("metaData.json");
         Path expectedReferencedMethod1 = resultExpandedDirectory.resolve("referenced-methods").resolve("referenced-methods-0.json");
         Path expectedReferencedMethodUses1 = resultExpandedDirectory.resolve("referenced-method-uses").resolve("referenced-method-uses-0.json");
         Path expectedReferencedMethod2 = resultExpandedDirectory.resolve("referenced-methods").resolve("referenced-methods-1.json");
@@ -138,10 +151,15 @@ public class ReportGeneratorTest {
         Assert.assertTrue(Files.exists(expectedReferencedMethod2), "Expected " + expectedReferencedMethod2 + " to exist");
         Assert.assertTrue(Files.exists(expectedReferencedMethodUses2), "Expected " + expectedReferencedMethodUses2 + " to exist");
 
+        MetaDataReportJson metaDataReport = null;
         MethodIdsReportJson methodIdsReport1 = null;
         MethodReferencesReportJson methodReferencesReport1 = null;
         MethodIdsReportJson methodIdsReport2 = null;
         MethodReferencesReportJson methodReferencesReport2 = null;
+
+        try (BufferedReader reader = Files.newBufferedReader(expectedMetaData)) {
+            metaDataReport = GSON.fromJson(reader, MetaDataReportJson.class);
+        }
 
         try (BufferedReader reader = Files.newBufferedReader(expectedReferencedMethod1)) {
             methodIdsReport1 = GSON.fromJson(reader, MethodIdsReportJson.class);
@@ -159,10 +177,15 @@ public class ReportGeneratorTest {
             methodReferencesReport2 = GSON.fromJson(reader, MethodReferencesReportJson.class);
         }
 
+        Assert.assertNotNull(metaDataReport);
         Assert.assertNotNull(methodIdsReport1);
         Assert.assertNotNull(methodReferencesReport1);
         Assert.assertNotNull(methodIdsReport2);
         Assert.assertNotNull(methodReferencesReport2);
+
+        Assert.assertEquals(metaDataReport.getHostName(), "hostName");
+        Assert.assertEquals(metaDataReport.getAnalyzedDirectory(), "analyzedDirectory");
+        Assert.assertEquals(metaDataReport.getProjectName(), "projectName");
 
         // Check partitioning numbers are correct
         Assert.assertEquals(methodIdsReport1.getMethodIds().size(), 1000);
