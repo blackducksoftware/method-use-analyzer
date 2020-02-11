@@ -49,7 +49,7 @@ Information for how to contribute to this library can be found in [the contribut
 
 ## Reporting Vulnerabilities
 
-If you discover a security vulnerability, contact the development team by e-mail at TODO
+If you discover a security vulnerability, contact the development team by e-mail at `oss@synopsys.com`
 
 ## Legal
 
