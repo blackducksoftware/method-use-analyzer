@@ -33,10 +33,10 @@ The primary use of the method analyzer is to find external method calls from a g
 
 ```
 MethodUseAnalyzer analyzer = new MethodUseAnalyzer();
-Path outputReportFile = analyzer.analyze(sourceDirectoryPath, outputDirectoryPath);
+Path outputReportFile = analyzer.analyze(sourceDirectoryPath, outputDirectoryPath, projectName);
 ```
 
-Where `sourceDirectoryPath` is the directory containing (either directly, or recursively) the Java `*.class` files to analyze, and `outputDirectoryPath` is the directory to save the report to. A custom name for the report may be specified via the `MethodUseAnalyzer.analyze(Path, Path, String)` function, in place of `MethodUseAnalyzer.analyze(Path, Path)`
+Where `sourceDirectoryPath` is the directory containing (either directly, or recursively) the Java `*.class` files to analyze, `outputDirectoryPath` is the directory to save the report to, and `projectName` is an optional human-readable label to associate with the analyzed files in generated reports. A custom name for the report file may be specified via the `MethodUseAnalyzer.analyze(Path, Path, String, String)` function, in place of `MethodUseAnalyzer.analyze(Path, Path, String)`
 
 ### Output
 

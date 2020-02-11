@@ -42,6 +42,8 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.hash.Hashing;
@@ -69,6 +71,20 @@ public class ReportGenerator {
     private static final int REFERENCE_MAX_CHUNK_SIZE = 1000;
 
     private static final Gson GSON = new Gson();
+
+    private final MetaDataReportJson metaDataReport;
+
+    /**
+     * @param hostName
+     *            The name of the host the analysis was performed on. Used in report meta-data
+     * @param analyzedDirectory
+     *            The directory which was analyzed. Used in report meta-data
+     * @param projectName
+     *            A name to associate with the analyzed source. May be null. Used in report meta-data
+     */
+    public ReportGenerator(String hostName, String analyzedDirectory, @Nullable String projectName) {
+        this.metaDataReport = new MetaDataReportJson(hostName, analyzedDirectory, projectName);
+    }
 
     /**
      * Generates a report of the provided method references within a project
@@ -160,6 +176,14 @@ public class ReportGenerator {
         Map<Path, Path> outputFileMapping = new HashMap<>();
 
         Path workingDirectory = Files.createTempDirectory("blackduck-method-uses");
+
+        // Generate a meta-data file with various report information
+        Path metaDataFile = workingDirectory.resolve("metaData.json");
+
+        try (BufferedWriter writer = Files.newBufferedWriter(metaDataFile)) {
+            GSON.toJson(metaDataReport, writer);
+            outputFileMapping.put(metaDataFile, metaDataFile.getFileName());
+        }
 
         // Separate uses into chunks for more efficient processing within the application (without requiring opening and
         // manipulating the file)
