@@ -2,8 +2,7 @@
 
 The method use analyzer library evaluates a Java project and produces a report of the method calls made to Java code not present within the project
 
-This library is currently in ALPHA, and will proceed to GA with the following guidelines:
-- ALPHA: Basic functionality under development, APIs may not be backwards compatibly between milestones
+This library is currently in BETA, and will proceed to GA with the following guidelines:
 - BETA: Some automated testing is in place for basic functionality, greater consideration is given to incompatible API changes
 - Initial GA: Majority of functionality is tested, library will follow semantic versioning guidelines from this point in regards to API compatiblity
 
@@ -44,7 +43,6 @@ The output of the method use analyzer is a report file, whose formatting is docu
 
 ## Contributing
 
-TODO linked doc
 Information for how to contribute to this library can be found in [the contribution guidelines](./docs/CONTRIBUTING.md)
 
 ## Reporting Vulnerabilities
