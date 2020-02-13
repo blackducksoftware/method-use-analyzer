@@ -16,7 +16,6 @@ allprojects {
 subprojects {
     apply plugin: 'java-library'
     apply plugin: 'checkstyle'
-    apply plugin: 'maven-publish'
     
     checkstyle {
         configFile = rootProject.file('config/checkstyle/checkstyle.xml')
@@ -42,14 +41,6 @@ subprojects {
     tasks.withType(Jar).all {
         from("${rootDir}"){
             include 'LICENSE'
-        }
-    }
-    
-    publishing {
-        publications {
-            maven(MavenPublication) {
-                from components.java
-            }
         }
     }
     

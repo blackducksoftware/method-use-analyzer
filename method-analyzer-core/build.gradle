@@ -1,3 +1,7 @@
+apply plugin: 'maven-publish'
+
+description = 'Library which analyzes Java projects for method calls to external methods'
+
 dependencies {
     compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
     
@@ -16,4 +20,44 @@ dependencies {
 // This requires setting up TestNG run/debug properties within IDE imports to execute tests
 test {
     systemProperty 'com.synopsys.method.analyzer.test.project.dir', "${project(':method-analyzer-test-project').projectDir}"
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            
+            //TODO romeara source artifacts
+            //artifact project.sourcesJar
+            //artifact project.javadocJar
+            
+            pom {
+                name = project.name
+                description = project.description
+                url = "https://www.github.com/blackducksoftware/${project.rootProject.name}"
+                
+                licenses {
+                    license {
+                        name = 'Apache License 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'blackduckoss'
+                        name = 'Synopsys OSS'
+                        email = 'oss@synopsys.com'
+                        organization = 'Synopsys, Inc.'
+                        organizationUrl = 'http://www.synopsys.com'
+                        timezone = 'America/New_York'
+                    }
+                }
+                scm {
+                    connection = "scm:git:git://github.com/blackducksoftware/${project.rootProject.name}.git"
+                    developerConnection = "scm:git:git@github.com:blackducksoftware/${project.rootProject.name}.git"
+                    url = "https://www.github.com/blackducksoftware/${project.rootProject.name}"
+                }
+            }
+        }
+    }
 }
