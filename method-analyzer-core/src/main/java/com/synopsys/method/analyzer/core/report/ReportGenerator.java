@@ -46,6 +46,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
+import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.gson.Gson;
 import com.synopsys.method.analyzer.core.model.ReferencedMethod;
@@ -146,13 +147,10 @@ public class ReportGenerator {
                 .append(':').append(method.getOutput().trim())
                 .toString();
 
-        String sha256hex = Hashing.sha256()
-                .hashString(signature, StandardCharsets.UTF_8)
-                .toString();
+        HashCode sha256 = Hashing.sha256()
+                .hashString(signature, StandardCharsets.UTF_8);
 
-        byte[] encoded = Base64.getEncoder().encode(sha256hex.getBytes(StandardCharsets.UTF_8));
-
-        return new String(encoded, StandardCharsets.UTF_8);
+        return Base64.getEncoder().encodeToString(sha256.asBytes());
     }
 
     /**

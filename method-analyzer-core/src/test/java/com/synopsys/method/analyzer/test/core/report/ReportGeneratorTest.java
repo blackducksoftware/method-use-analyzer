@@ -117,6 +117,8 @@ public class ReportGeneratorTest {
         ReferencedMethodUsesJson resultJson = usesById.values().stream().findFirst().get();
 
         Assert.assertEquals(usesById.size(), 1);
+        Assert.assertEquals(resultJson.getMethod().getId(), "n0VJzGLYjELWet+V5A3IxQgkG/kQRR3P0OTmEpiScZs=",
+                "Referenced Method ID was unexpected value, check that ID generation logic in ReportGenerator was not changed unintentionally.");
         Assert.assertEquals(resultJson.getMethod().getMethodName(), "methodName");
         Assert.assertEquals(resultJson.getMethod().getMethodOwner(), "methodOwner");
         Assert.assertEquals(resultJson.getMethod().getOutput(), "output");
