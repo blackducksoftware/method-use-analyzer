@@ -29,6 +29,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -70,8 +72,10 @@ public class MethodReferenceRegistry {
      *            The class the method returns, or "void"
      * @param whereUsed
      *            A signature of where within the analyzed project the method was referenced
+     * @param lineNumber
+     *            If available, the line the method was referenced on
      */
-    public void registerReference(String methodOwner, String methodName, List<String> inputs, String output, String whereUsed) {
+    public void registerReference(String methodOwner, String methodName, List<String> inputs, String output, String whereUsed, @Nullable Integer lineNumber) {
         Objects.requireNonNull(methodOwner);
         Objects.requireNonNull(methodName);
         Objects.requireNonNull(inputs);
@@ -79,11 +83,13 @@ public class MethodReferenceRegistry {
         Objects.requireNonNull(whereUsed);
 
         if (!methodOwnerExclusions.contains(methodOwner)) {
+            String useReference = whereUsed + ":" + (lineNumber != null ? lineNumber : "?");
+
             ReferencedMethod referencedMethod = new ReferencedMethod(methodOwner, methodName, inputs, output);
 
             Collection<String> values = Optional.ofNullable(references.get(methodOwner, referencedMethod))
                     .orElse(new HashSet<>());
-            values.add(whereUsed);
+            values.add(useReference);
 
             references.put(methodOwner, referencedMethod, values);
         }

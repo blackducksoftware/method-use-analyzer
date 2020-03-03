@@ -200,9 +200,9 @@ public class ClassMethodReferenceVisitor extends ClassVisitor {
                     .map(Type::getClassName)
                     .collect(Collectors.toList());
 
-            String useReference = currentClassName + "." + currentMethodName + ":" + (currentLine != null ? currentLine : "?");
+            String useReference = currentClassName + "." + currentMethodName;
 
-            referenceRegistry.registerReference(formatQualifiedName(effectiveOwner), name, argumentList, returnType.getClassName(), useReference);
+            referenceRegistry.registerReference(formatQualifiedName(effectiveOwner), name, argumentList, returnType.getClassName(), useReference, currentLine);
         }
 
     }

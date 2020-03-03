@@ -36,36 +36,36 @@ public class MethodReferenceRegistryTest {
 
     @Test(expectedExceptions = NullPointerException.class)
     public void registerReferenceNullMethodOwner() throws Exception {
-        new MethodReferenceRegistry().registerReference(null, "methodName", Collections.emptyList(), "output", "whereUsed");
+        new MethodReferenceRegistry().registerReference(null, "methodName", Collections.emptyList(), "output", "whereUsed", 0);
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void registerReferenceNullMethodName() throws Exception {
-        new MethodReferenceRegistry().registerReference("methodOwner", null, Collections.emptyList(), "output", "whereUsed");
+        new MethodReferenceRegistry().registerReference("methodOwner", null, Collections.emptyList(), "output", "whereUsed", 0);
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void registerReferenceNullInputs() throws Exception {
-        new MethodReferenceRegistry().registerReference("methodOwner", "methodName", null, "output", "whereUsed");
+        new MethodReferenceRegistry().registerReference("methodOwner", "methodName", null, "output", "whereUsed", 0);
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void registerReferenceNullOutput() throws Exception {
-        new MethodReferenceRegistry().registerReference("methodOwner", "methodName", Collections.emptyList(), null, "whereUsed");
+        new MethodReferenceRegistry().registerReference("methodOwner", "methodName", Collections.emptyList(), null, "whereUsed", 0);
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void registerReferenceNullWhereUsed() throws Exception {
-        new MethodReferenceRegistry().registerReference("methodOwner", "methodName", Collections.emptyList(), "output", null);
+        new MethodReferenceRegistry().registerReference("methodOwner", "methodName", Collections.emptyList(), "output", null, 0);
     }
 
     @Test
-    public void registerReference() throws Exception {
+    public void registerReferenceNullLineNumber() throws Exception {
         ReferencedMethod expectedKey = new ReferencedMethod("methodOwner", "methodName", Collections.emptyList(), "output");
 
         MethodReferenceRegistry methodReferenceRegistry = new MethodReferenceRegistry();
 
-        methodReferenceRegistry.registerReference("methodOwner", "methodName", Collections.emptyList(), "output", "whereUsed");
+        methodReferenceRegistry.registerReference("methodOwner", "methodName", Collections.emptyList(), "output", "whereUsed", null);
 
         Multimap<ReferencedMethod, String> result = methodReferenceRegistry.getReferences();
 
@@ -77,7 +77,28 @@ public class MethodReferenceRegistryTest {
         Collection<String> whereUsedResult = result.get(expectedKey);
         Assert.assertNotNull(whereUsedResult);
         Assert.assertEquals(whereUsedResult.size(), 1);
-        Assert.assertTrue(whereUsedResult.contains("whereUsed"));
+        Assert.assertTrue(whereUsedResult.contains("whereUsed:?"));
+    }
+
+    @Test
+    public void registerReference() throws Exception {
+        ReferencedMethod expectedKey = new ReferencedMethod("methodOwner", "methodName", Collections.emptyList(), "output");
+
+        MethodReferenceRegistry methodReferenceRegistry = new MethodReferenceRegistry();
+
+        methodReferenceRegistry.registerReference("methodOwner", "methodName", Collections.emptyList(), "output", "whereUsed", 1);
+
+        Multimap<ReferencedMethod, String> result = methodReferenceRegistry.getReferences();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(result.keySet().size(), 1);
+
+        Assert.assertTrue(result.containsKey(expectedKey));
+
+        Collection<String> whereUsedResult = result.get(expectedKey);
+        Assert.assertNotNull(whereUsedResult);
+        Assert.assertEquals(whereUsedResult.size(), 1);
+        Assert.assertTrue(whereUsedResult.contains("whereUsed:1"));
     }
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -93,8 +114,8 @@ public class MethodReferenceRegistryTest {
         MethodReferenceRegistry methodReferenceRegistry = new MethodReferenceRegistry();
 
         methodReferenceRegistry.registerExclusion(excludedMethodOwner);
-        methodReferenceRegistry.registerReference("methodOwner", "methodName", Collections.emptyList(), "output", "whereUsed");
-        methodReferenceRegistry.registerReference(excludedMethodOwner, "methodName", Collections.emptyList(), "output", "whereUsed");
+        methodReferenceRegistry.registerReference("methodOwner", "methodName", Collections.emptyList(), "output", "whereUsed", 1);
+        methodReferenceRegistry.registerReference(excludedMethodOwner, "methodName", Collections.emptyList(), "output", "whereUsed", 2);
 
         Multimap<ReferencedMethod, String> result = methodReferenceRegistry.getReferences();
 
@@ -106,7 +127,7 @@ public class MethodReferenceRegistryTest {
         Collection<String> whereUsedResult = result.get(expectedKey);
         Assert.assertNotNull(whereUsedResult);
         Assert.assertEquals(whereUsedResult.size(), 1);
-        Assert.assertTrue(whereUsedResult.contains("whereUsed"));
+        Assert.assertTrue(whereUsedResult.contains("whereUsed:1"));
     }
 
     @Test
@@ -116,8 +137,8 @@ public class MethodReferenceRegistryTest {
 
         MethodReferenceRegistry methodReferenceRegistry = new MethodReferenceRegistry();
 
-        methodReferenceRegistry.registerReference("methodOwner", "methodName", Collections.emptyList(), "output", "whereUsed");
-        methodReferenceRegistry.registerReference(excludedMethodOwner, "methodName", Collections.emptyList(), "output", "whereUsed");
+        methodReferenceRegistry.registerReference("methodOwner", "methodName", Collections.emptyList(), "output", "whereUsed", 1);
+        methodReferenceRegistry.registerReference(excludedMethodOwner, "methodName", Collections.emptyList(), "output", "whereUsed", 2);
         methodReferenceRegistry.registerExclusion(excludedMethodOwner);
 
         Multimap<ReferencedMethod, String> result = methodReferenceRegistry.getReferences();
@@ -130,7 +151,7 @@ public class MethodReferenceRegistryTest {
         Collection<String> whereUsedResult = result.get(expectedKey);
         Assert.assertNotNull(whereUsedResult);
         Assert.assertEquals(whereUsedResult.size(), 1);
-        Assert.assertTrue(whereUsedResult.contains("whereUsed"));
+        Assert.assertTrue(whereUsedResult.contains("whereUsed:1"));
     }
 
 }
