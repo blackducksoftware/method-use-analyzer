@@ -25,10 +25,12 @@ package com.synopsys.method.analyzer.core.report;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
 import com.google.common.base.MoreObjects;
+import com.synopsys.method.analyzer.core.model.MethodUse;
 import com.synopsys.method.analyzer.core.model.ReferencedMethod;
 
 /**
@@ -46,9 +48,13 @@ public class ReferencedMethodUsesJson {
 
     private final Collection<String> uses;
 
-    public ReferencedMethodUsesJson(String id, ReferencedMethod method, Collection<String> uses) {
+    public ReferencedMethodUsesJson(String id, ReferencedMethod method, Collection<MethodUse> uses) {
+        Objects.requireNonNull(uses);
+
         this.method = new ReferencedMethodJson(id, method.getMethodOwner(), method.getMethodName(), method.getInputs(), method.getOutput());
-        this.uses = Objects.requireNonNull(uses);
+        this.uses = uses.stream()
+                .map(MethodUse::toSignature)
+                .collect(Collectors.toList());
     }
 
     public ReferencedMethodJson getMethod() {
@@ -145,8 +151,8 @@ public class ReferencedMethodUsesJson {
         public boolean equals(@Nullable Object obj) {
             boolean result = false;
 
-            if (obj instanceof ReferencedMethodUsesJson.ReferencedMethodJson) {
-                ReferencedMethodUsesJson.ReferencedMethodJson compare = (ReferencedMethodUsesJson.ReferencedMethodJson) obj;
+            if (obj instanceof ReferencedMethodJson) {
+                ReferencedMethodJson compare = (ReferencedMethodJson) obj;
 
                 result = Objects.equals(compare.getId(), getId())
                         && Objects.equals(compare.getMethodOwner(), getMethodOwner())

@@ -40,6 +40,7 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.Multimap;
 import com.synopsys.method.analyzer.core.bytecode.ClassMethodReferenceVisitor;
+import com.synopsys.method.analyzer.core.model.MethodUse;
 import com.synopsys.method.analyzer.core.model.ReferencedMethod;
 import com.synopsys.method.analyzer.test.core.TestProperties;
 
@@ -49,7 +50,7 @@ public class ClassMethodReferenceVisitorTest {
 
     private static final String CLASS_FILE_REGEX = ".*\\.class";
 
-    private Multimap<ReferencedMethod, String> result = null;
+    private Multimap<ReferencedMethod, MethodUse> result = null;
 
     @BeforeClass
     public void analyze() throws Exception {
@@ -86,9 +87,9 @@ public class ClassMethodReferenceVisitorTest {
 
         Assert.assertTrue(result.containsKey(objectConstructorReference));
 
-        Collection<String> objectConstructorReferences = result.get(objectConstructorReference);
+        Collection<MethodUse> objectConstructorReferences = result.get(objectConstructorReference);
         Assert.assertEquals(objectConstructorReferences.size(), 1, "Found unexpected number of results: " + objectConstructorReferences);
-        Assert.assertTrue(objectConstructorReferences.contains("com.synopsys.method.analyzer.test.project.BasicTestClass.<init>:28"),
+        Assert.assertTrue(objectConstructorReferences.contains(new MethodUse("com.synopsys.method.analyzer.test.project.BasicTestClass.<init>", 28)),
                 "Unexpected reference: " + objectConstructorReferences);
     }
 
@@ -98,9 +99,9 @@ public class ClassMethodReferenceVisitorTest {
         ReferencedMethod systemPropertyReference = new ReferencedMethod("java.lang.System", "getProperty", Arrays.asList("java.lang.String"),
                 "java.lang.String");
 
-        Collection<String> systemPropertyReferences = result.get(systemPropertyReference);
+        Collection<MethodUse> systemPropertyReferences = result.get(systemPropertyReference);
         Assert.assertEquals(systemPropertyReferences.size(), 1, "Found unexpected number of results: " + systemPropertyReferences);
-        Assert.assertTrue(systemPropertyReferences.contains("com.synopsys.method.analyzer.test.project.BasicTestClass.<init>:30"),
+        Assert.assertTrue(systemPropertyReferences.contains(new MethodUse("com.synopsys.method.analyzer.test.project.BasicTestClass.<init>", 30)),
                 "Unexpected reference: " + systemPropertyReferences);
     }
 
@@ -109,9 +110,9 @@ public class ClassMethodReferenceVisitorTest {
     public void withinMethodReference() throws Exception {
         ReferencedMethod stringFormatReference = new ReferencedMethod("java.lang.String", "format", Arrays.asList("java.lang.String", "java.lang.Object[]"),
                 "java.lang.String");
-        Collection<String> stringFormatReferences = result.get(stringFormatReference);
+        Collection<MethodUse> stringFormatReferences = result.get(stringFormatReference);
         Assert.assertEquals(stringFormatReferences.size(), 1, "Found unexpected number of results: " + stringFormatReferences);
-        Assert.assertTrue(stringFormatReferences.contains("com.synopsys.method.analyzer.test.project.BasicTestClass.getThing:35"),
+        Assert.assertTrue(stringFormatReferences.contains(new MethodUse("com.synopsys.method.analyzer.test.project.BasicTestClass.getThing", 35)),
                 "Unexpected reference: " + stringFormatReferences);
     }
 
@@ -120,14 +121,15 @@ public class ClassMethodReferenceVisitorTest {
     public void withinLambdaReference() throws Exception {
         ReferencedMethod stringToUpperCaseReference = new ReferencedMethod("java.lang.String", "toUpperCase", Collections.emptyList(),
                 "java.lang.String");
-        Collection<String> stringToUpperCaseReferences = result.get(stringToUpperCaseReference);
+        Collection<MethodUse> stringToUpperCaseReferences = result.get(stringToUpperCaseReference);
 
         // This validation is weird, because compiling with Eclipse vs with Gradle resulted in different behavior in
         // terms of the line number associated with the dynamic invocation of the method. This difference is all the way
         // at the bytecode level
         Assert.assertFalse(stringToUpperCaseReferences.isEmpty());
         Assert.assertTrue(
-                stringToUpperCaseReferences.stream().allMatch(s -> s.startsWith("com.synopsys.method.analyzer.test.project.BasicTestClass.getDynamic")),
+                stringToUpperCaseReferences.stream()
+                        .allMatch(s -> s.getQualifiedMethodName().startsWith("com.synopsys.method.analyzer.test.project.BasicTestClass.getDynamic")),
                 "Unexpected reference: " + stringToUpperCaseReferences);
     }
 

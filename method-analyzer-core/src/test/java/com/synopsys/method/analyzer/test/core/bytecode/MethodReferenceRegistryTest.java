@@ -30,6 +30,7 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.Multimap;
 import com.synopsys.method.analyzer.core.bytecode.MethodReferenceRegistry;
+import com.synopsys.method.analyzer.core.model.MethodUse;
 import com.synopsys.method.analyzer.core.model.ReferencedMethod;
 
 public class MethodReferenceRegistryTest {
@@ -67,17 +68,17 @@ public class MethodReferenceRegistryTest {
 
         methodReferenceRegistry.registerReference("methodOwner", "methodName", Collections.emptyList(), "output", "whereUsed", null);
 
-        Multimap<ReferencedMethod, String> result = methodReferenceRegistry.getReferences();
+        Multimap<ReferencedMethod, MethodUse> result = methodReferenceRegistry.getReferences();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(result.keySet().size(), 1);
 
         Assert.assertTrue(result.containsKey(expectedKey));
 
-        Collection<String> whereUsedResult = result.get(expectedKey);
+        Collection<MethodUse> whereUsedResult = result.get(expectedKey);
         Assert.assertNotNull(whereUsedResult);
         Assert.assertEquals(whereUsedResult.size(), 1);
-        Assert.assertTrue(whereUsedResult.contains("whereUsed:?"));
+        Assert.assertTrue(whereUsedResult.contains(new MethodUse("whereUsed", null)));
     }
 
     @Test
@@ -88,17 +89,17 @@ public class MethodReferenceRegistryTest {
 
         methodReferenceRegistry.registerReference("methodOwner", "methodName", Collections.emptyList(), "output", "whereUsed", 1);
 
-        Multimap<ReferencedMethod, String> result = methodReferenceRegistry.getReferences();
+        Multimap<ReferencedMethod, MethodUse> result = methodReferenceRegistry.getReferences();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(result.keySet().size(), 1);
 
         Assert.assertTrue(result.containsKey(expectedKey));
 
-        Collection<String> whereUsedResult = result.get(expectedKey);
+        Collection<MethodUse> whereUsedResult = result.get(expectedKey);
         Assert.assertNotNull(whereUsedResult);
         Assert.assertEquals(whereUsedResult.size(), 1);
-        Assert.assertTrue(whereUsedResult.contains("whereUsed:1"));
+        Assert.assertTrue(whereUsedResult.contains(new MethodUse("whereUsed", 1)));
     }
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -117,17 +118,17 @@ public class MethodReferenceRegistryTest {
         methodReferenceRegistry.registerReference("methodOwner", "methodName", Collections.emptyList(), "output", "whereUsed", 1);
         methodReferenceRegistry.registerReference(excludedMethodOwner, "methodName", Collections.emptyList(), "output", "whereUsed", 2);
 
-        Multimap<ReferencedMethod, String> result = methodReferenceRegistry.getReferences();
+        Multimap<ReferencedMethod, MethodUse> result = methodReferenceRegistry.getReferences();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(result.keySet().size(), 1);
 
         Assert.assertTrue(result.containsKey(expectedKey));
 
-        Collection<String> whereUsedResult = result.get(expectedKey);
+        Collection<MethodUse> whereUsedResult = result.get(expectedKey);
         Assert.assertNotNull(whereUsedResult);
         Assert.assertEquals(whereUsedResult.size(), 1);
-        Assert.assertTrue(whereUsedResult.contains("whereUsed:1"));
+        Assert.assertTrue(whereUsedResult.contains(new MethodUse("whereUsed", 1)));
     }
 
     @Test
@@ -141,17 +142,17 @@ public class MethodReferenceRegistryTest {
         methodReferenceRegistry.registerReference(excludedMethodOwner, "methodName", Collections.emptyList(), "output", "whereUsed", 2);
         methodReferenceRegistry.registerExclusion(excludedMethodOwner);
 
-        Multimap<ReferencedMethod, String> result = methodReferenceRegistry.getReferences();
+        Multimap<ReferencedMethod, MethodUse> result = methodReferenceRegistry.getReferences();
 
         Assert.assertNotNull(result);
         Assert.assertEquals(result.keySet().size(), 1);
 
         Assert.assertTrue(result.containsKey(expectedKey));
 
-        Collection<String> whereUsedResult = result.get(expectedKey);
+        Collection<MethodUse> whereUsedResult = result.get(expectedKey);
         Assert.assertNotNull(whereUsedResult);
         Assert.assertEquals(whereUsedResult.size(), 1);
-        Assert.assertTrue(whereUsedResult.contains("whereUsed:1"));
+        Assert.assertTrue(whereUsedResult.contains(new MethodUse("whereUsed", 1)));
     }
 
 }

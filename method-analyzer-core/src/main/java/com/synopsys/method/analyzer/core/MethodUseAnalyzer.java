@@ -39,6 +39,7 @@ import org.objectweb.asm.ClassReader;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Multimap;
 import com.synopsys.method.analyzer.core.bytecode.ClassMethodReferenceVisitor;
+import com.synopsys.method.analyzer.core.model.MethodUse;
 import com.synopsys.method.analyzer.core.model.ReferencedMethod;
 import com.synopsys.method.analyzer.core.report.ReportGenerator;
 
@@ -104,7 +105,7 @@ public class MethodUseAnalyzer {
         Preconditions.checkArgument(Files.exists(sourceDirectory), "The source path provided (%s) does not exist", sourceDirectory.toString());
         Preconditions.checkArgument(Files.isDirectory(sourceDirectory), "The source path provided (%s) is not a directory", sourceDirectory.toString());
 
-        Multimap<ReferencedMethod, String> references = null;
+        Multimap<ReferencedMethod, MethodUse> references = null;
         ReportGenerator reportGenerator = new ReportGenerator(InetAddress.getLocalHost().getHostName(), sourceDirectory.toString(), projectName);
 
         try (Stream<Path> files = Files.walk(sourceDirectory)) {

@@ -38,6 +38,7 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 
 import com.google.common.collect.Multimap;
+import com.synopsys.method.analyzer.core.model.MethodUse;
 import com.synopsys.method.analyzer.core.model.ReferencedMethod;
 
 /**
@@ -95,7 +96,7 @@ public class ClassMethodReferenceVisitor extends ClassVisitor {
     /**
      * @return A mapping of external method references to one or more use locations
      */
-    public Multimap<ReferencedMethod, String> getReferences() {
+    public Multimap<ReferencedMethod, MethodUse> getReferences() {
         return referenceRegistry.getReferences();
     }
 

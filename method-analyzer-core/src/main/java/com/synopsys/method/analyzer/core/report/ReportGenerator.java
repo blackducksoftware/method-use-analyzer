@@ -49,6 +49,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.gson.Gson;
+import com.synopsys.method.analyzer.core.model.MethodUse;
 import com.synopsys.method.analyzer.core.model.ReferencedMethod;
 
 /**
@@ -100,7 +101,7 @@ public class ReportGenerator {
      * @throws IOException
      *             If there is an error writing the report to the file system
      */
-    public Path generateReport(Multimap<ReferencedMethod, String> references, Path outputDirectory, String outputFileName) throws IOException {
+    public Path generateReport(Multimap<ReferencedMethod, MethodUse> references, Path outputDirectory, String outputFileName) throws IOException {
         Objects.requireNonNull(references);
         Objects.requireNonNull(outputDirectory);
         Objects.requireNonNull(outputFileName);
@@ -109,7 +110,7 @@ public class ReportGenerator {
         List<String> uniqueMethodKeys = new LinkedList<>();
         List<ReferencedMethodUsesJson> methodUses = new LinkedList<>();
 
-        for (Entry<ReferencedMethod, Collection<String>> entry : references.asMap().entrySet()) {
+        for (Entry<ReferencedMethod, Collection<MethodUse>> entry : references.asMap().entrySet()) {
             // Generation unique, opaque ID to match method uses against
             String id = generateId(entry.getKey());
 

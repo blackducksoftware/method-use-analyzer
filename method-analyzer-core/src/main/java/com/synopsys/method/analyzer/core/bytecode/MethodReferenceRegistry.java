@@ -36,6 +36,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Table;
 import com.google.common.collect.Table.Cell;
+import com.synopsys.method.analyzer.core.model.MethodUse;
 import com.synopsys.method.analyzer.core.model.ReferencedMethod;
 
 /**
@@ -50,7 +51,7 @@ import com.synopsys.method.analyzer.core.model.ReferencedMethod;
 public class MethodReferenceRegistry {
 
     // Key'd by owner, signature, value of referenced locations
-    private final Table<String, ReferencedMethod, Collection<String>> references;
+    private final Table<String, ReferencedMethod, Collection<MethodUse>> references;
 
     private final Set<String> methodOwnerExclusions;
 
@@ -83,11 +84,11 @@ public class MethodReferenceRegistry {
         Objects.requireNonNull(whereUsed);
 
         if (!methodOwnerExclusions.contains(methodOwner)) {
-            String useReference = whereUsed + ":" + (lineNumber != null ? lineNumber : "?");
+            MethodUse useReference = new MethodUse(whereUsed, lineNumber);
 
             ReferencedMethod referencedMethod = new ReferencedMethod(methodOwner, methodName, inputs, output);
 
-            Collection<String> values = Optional.ofNullable(references.get(methodOwner, referencedMethod))
+            Collection<MethodUse> values = Optional.ofNullable(references.get(methodOwner, referencedMethod))
                     .orElse(new HashSet<>());
             values.add(useReference);
 
@@ -115,10 +116,10 @@ public class MethodReferenceRegistry {
     /**
      * @return A mapping of referenced methods to one or more locations use was detected in
      */
-    public Multimap<ReferencedMethod, String> getReferences() {
-        Multimap<ReferencedMethod, String> result = HashMultimap.create();
+    public Multimap<ReferencedMethod, MethodUse> getReferences() {
+        Multimap<ReferencedMethod, MethodUse> result = HashMultimap.create();
 
-        for (Cell<String, ReferencedMethod, Collection<String>> reference : references.cellSet()) {
+        for (Cell<String, ReferencedMethod, Collection<MethodUse>> reference : references.cellSet()) {
             result.putAll(reference.getColumnKey(), reference.getValue());
         }
 

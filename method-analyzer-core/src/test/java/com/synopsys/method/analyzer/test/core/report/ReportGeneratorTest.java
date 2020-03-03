@@ -44,6 +44,7 @@ import com.google.common.base.Functions;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
+import com.synopsys.method.analyzer.core.model.MethodUse;
 import com.synopsys.method.analyzer.core.model.ReferencedMethod;
 import com.synopsys.method.analyzer.core.report.MetaDataReportJson;
 import com.synopsys.method.analyzer.core.report.MethodIdsReportJson;
@@ -67,8 +68,8 @@ public class ReportGeneratorTest {
 
     @Test
     public void simpleReport() throws Exception {
-        Multimap<ReferencedMethod, String> references = HashMultimap.create();
-        references.put(new ReferencedMethod("methodOwner", "methodName", Collections.singletonList("input"), "output"), "use");
+        Multimap<ReferencedMethod, MethodUse> references = HashMultimap.create();
+        references.put(new ReferencedMethod("methodOwner", "methodName", Collections.singletonList("input"), "output"), new MethodUse("use", 1));
 
         Path result = reportGenerator.generateReport(references, testReportDirectory, "simpleReport");
 
@@ -124,15 +125,16 @@ public class ReportGeneratorTest {
         Assert.assertEquals(resultJson.getMethod().getOutput(), "output");
         Assert.assertEquals(resultJson.getMethod().getInputs(), Collections.singletonList("input"));
         Assert.assertEquals(resultJson.getUses().size(), 1);
-        Assert.assertTrue(resultJson.getUses().contains("use"));
+        Assert.assertTrue(resultJson.getUses().contains("use:1"));
     }
 
     @Test
     public void partitionedReport() throws Exception {
-        Multimap<ReferencedMethod, String> references = HashMultimap.create();
+        Multimap<ReferencedMethod, MethodUse> references = HashMultimap.create();
 
         for (int i = 0; i < 2000; i++) {
-            references.put(new ReferencedMethod("methodOwner" + i, "methodName" + i, Collections.singletonList("input" + i), "output" + i), "use" + i);
+            references.put(new ReferencedMethod("methodOwner" + i, "methodName" + i, Collections.singletonList("input" + i), "output" + i),
+                    new MethodUse("use" + i, i));
         }
 
         Path result = reportGenerator.generateReport(references, testReportDirectory, "simpleReport");
