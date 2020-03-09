@@ -36,7 +36,11 @@ The "method uses" report(s) are within the `referenced-method-uses` directory of
 - methodUses[].method.output
   - Qualified class name of the output of the method, or `void` if defined with a void return type
 - methodUses[].uses[]
-  - Array of formatted strings documenting where in the project the method is used
+  - Array of recording documenting where in the project the method is used
+- methodUses[].uses[].qualifiedMethodName
+  - The qualified class and method name the reference is located in
+- methodUses[].uses[].lineNumber
+  - Optional - the line number the reference is made on within the source file
 
 ## ID Generation
 

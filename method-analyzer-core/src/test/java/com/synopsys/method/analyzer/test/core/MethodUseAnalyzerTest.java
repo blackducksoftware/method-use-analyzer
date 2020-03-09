@@ -46,6 +46,7 @@ import com.synopsys.method.analyzer.core.MethodUseAnalyzer;
 import com.synopsys.method.analyzer.core.report.MethodIdsReportJson;
 import com.synopsys.method.analyzer.core.report.MethodReferencesReportJson;
 import com.synopsys.method.analyzer.core.report.ReferencedMethodUsesJson;
+import com.synopsys.method.analyzer.core.report.ReferencedMethodUsesJson.MethodUseJson;
 
 public class MethodUseAnalyzerTest {
 
@@ -54,12 +55,12 @@ public class MethodUseAnalyzerTest {
     private static final Gson GSON = new Gson();
 
     // Not an exhaustive list of every use in the output report, jsut a known set
-    private static final Multimap<String, String> EXPECTED_USES = HashMultimap.create();
+    private static final Multimap<String, MethodUseJson> EXPECTED_USES = HashMultimap.create();
 
     static {
-        EXPECTED_USES.put("java.lang.Object.<init>():void", "com.synopsys.method.analyzer.test.project.BasicTestClass.<init>:28");
+        EXPECTED_USES.put("java.lang.Object.<init>():void", new MethodUseJson("com.synopsys.method.analyzer.test.project.BasicTestClass.<init>", 28));
         EXPECTED_USES.put("java.lang.System.getProperty(java.lang.String):java.lang.String",
-                "com.synopsys.method.analyzer.test.project.BasicTestClass.<init>:30");
+                new MethodUseJson("com.synopsys.method.analyzer.test.project.BasicTestClass.<init>", 30));
     }
 
     @Test
@@ -103,7 +104,7 @@ public class MethodUseAnalyzerTest {
         Assert.assertEquals(methodIdsReport.getMethodIds().size(), 10);
 
         // Check that specific known uses are detected
-        Multimap<String, String> foundUses = HashMultimap.create();
+        Multimap<String, MethodUseJson> foundUses = HashMultimap.create();
 
         for (ReferencedMethodUsesJson value : methodReferencesReport.getMethodUses()) {
             String formattedInput = value.getMethod().getInputs().stream()
@@ -114,7 +115,7 @@ public class MethodUseAnalyzerTest {
             foundUses.putAll(formattedMethod, value.getUses());
         }
 
-        for (Entry<String, String> expectedEntry : EXPECTED_USES.entries()) {
+        for (Entry<String, MethodUseJson> expectedEntry : EXPECTED_USES.entries()) {
             Assert.assertTrue(foundUses.containsEntry(expectedEntry.getKey(), expectedEntry.getValue()),
                     "Did not find " + expectedEntry.getKey() + " (" + expectedEntry.getValue() + ")");
         }
