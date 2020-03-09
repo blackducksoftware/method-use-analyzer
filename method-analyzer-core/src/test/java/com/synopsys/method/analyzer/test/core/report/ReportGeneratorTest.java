@@ -50,6 +50,7 @@ import com.synopsys.method.analyzer.core.report.MetaDataReportJson;
 import com.synopsys.method.analyzer.core.report.MethodIdsReportJson;
 import com.synopsys.method.analyzer.core.report.MethodReferencesReportJson;
 import com.synopsys.method.analyzer.core.report.ReferencedMethodUsesJson;
+import com.synopsys.method.analyzer.core.report.ReferencedMethodUsesJson.MethodUseJson;
 import com.synopsys.method.analyzer.core.report.ReportGenerator;
 
 public class ReportGeneratorTest {
@@ -125,7 +126,7 @@ public class ReportGeneratorTest {
         Assert.assertEquals(resultJson.getMethod().getOutput(), "output");
         Assert.assertEquals(resultJson.getMethod().getInputs(), Collections.singletonList("input"));
         Assert.assertEquals(resultJson.getUses().size(), 1);
-        Assert.assertTrue(resultJson.getUses().contains("use:1"));
+        Assert.assertTrue(resultJson.getUses().contains(new MethodUseJson("use", 1)));
     }
 
     @Test

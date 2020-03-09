@@ -46,14 +46,14 @@ public class ReferencedMethodUsesJson {
 
     private final ReferencedMethodJson method;
 
-    private final Collection<String> uses;
+    private final Collection<MethodUseJson> uses;
 
     public ReferencedMethodUsesJson(String id, ReferencedMethod method, Collection<MethodUse> uses) {
         Objects.requireNonNull(uses);
 
         this.method = new ReferencedMethodJson(id, method.getMethodOwner(), method.getMethodName(), method.getInputs(), method.getOutput());
         this.uses = uses.stream()
-                .map(MethodUse::toSignature)
+                .map(use -> new MethodUseJson(use.getQualifiedMethodName(), use.getLineNumber().orElse(null)))
                 .collect(Collectors.toList());
     }
 
@@ -61,7 +61,7 @@ public class ReferencedMethodUsesJson {
         return method;
     }
 
-    public Collection<String> getUses() {
+    public Collection<MethodUseJson> getUses() {
         return uses;
     }
 
@@ -172,6 +172,61 @@ public class ReferencedMethodUsesJson {
                     .add("methodName", getMethodName())
                     .add("inputs", getInputs())
                     .add("output", getOutput())
+                    .toString();
+        }
+
+    }
+
+    /**
+     * Represents JSON data for a specific use of a method within an analyzed project
+     *
+     * @author romeara
+     */
+    public static final class MethodUseJson {
+
+        private final String qualifiedMethodName;
+
+        @Nullable
+        private final Integer lineNumber;
+
+        public MethodUseJson(String qualifiedMethodName, Integer lineNumber) {
+            this.qualifiedMethodName = Objects.requireNonNull(qualifiedMethodName);
+            this.lineNumber = Objects.requireNonNull(lineNumber);
+        }
+
+        public String getQualifiedMethodName() {
+            return qualifiedMethodName;
+        }
+
+        public Integer getLineNumber() {
+            return lineNumber;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getQualifiedMethodName(),
+                    getLineNumber());
+        }
+
+        @Override
+        public boolean equals(@Nullable Object obj) {
+            boolean result = false;
+
+            if (obj instanceof ReferencedMethodUsesJson.MethodUseJson) {
+                ReferencedMethodUsesJson.MethodUseJson compare = (ReferencedMethodUsesJson.MethodUseJson) obj;
+
+                result = Objects.equals(compare.getQualifiedMethodName(), getQualifiedMethodName())
+                        && Objects.equals(compare.getLineNumber(), getLineNumber());
+            }
+
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return MoreObjects.toStringHelper(getClass()).omitNullValues()
+                    .add("qualifiedMethodName", getQualifiedMethodName())
+                    .add("lineNumber", getLineNumber())
                     .toString();
         }
 
