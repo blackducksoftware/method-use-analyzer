@@ -20,7 +20,7 @@ subprojects {
     checkstyle {
         configFile = rootProject.file('config/checkstyle/checkstyle.xml')
         configProperties = [ 'checkstyle.config.dir' : rootProject.file('config/checkstyle') ]
-        toolVersion = '8.27'
+        toolVersion = '8.29'
     }
      
     task checkstyleAll{}
