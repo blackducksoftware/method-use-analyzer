@@ -1,7 +1,7 @@
 /*
  * method-use-analyzer
  *
- * Copyright (c) 2020 Synopsys, Inc.
+ * Copyright (C) 2020 Synopsys Inc.
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
