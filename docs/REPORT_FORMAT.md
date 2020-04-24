@@ -15,8 +15,21 @@ The "meta data" report is located in the root of the report directory of the exp
 
 ## Methods Report
 
-The "methods" report(s) are within the `referenced-methods` directory of the expanded report file. Each of these files is a JSON file, containing one element: `methodIds`. This is a JSON array of strings. Each string is a unique, opaque ID refering to a specific discovered method, and is contained as an identifier within the other report formats for linking data together.
+The "methods" report(s) are within the `referenced-methods` directory of the expanded report file. Each of these files is a JSON file, containing several elements:
 
+- methodIds[]
+  - Array of identifiers for each unique method reference found in the report
+- methodIds[].signature
+  - A unique, opaque ID referring to a specific discovered method, and is contained as an identifier within the other report formats for linking data together, described in the "ID Generation" section
+- methodIds[].methodOwner
+  - A unique, opaque ID referring to the qualified class name which defines the discovered method
+- methodIds[].methodName
+  - A unique, opaque ID referring to the name of the discovered method
+- methodIds[].inputs
+  - A unique, opaque ID referring to the input types of the discovered method
+- methodIds[].outputs
+  - A unique, opaque ID referring to the output type of the discovered method
+  
 ## Method Uses Report
 
 The "method uses" report(s) are within the `referenced-method-uses` directory of the expanded report file. Each of these files is a JSON file, containing several elements:

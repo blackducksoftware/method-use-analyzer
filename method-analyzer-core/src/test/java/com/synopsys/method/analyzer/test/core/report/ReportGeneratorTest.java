@@ -47,6 +47,7 @@ import com.google.gson.Gson;
 import com.synopsys.method.analyzer.core.model.MethodUse;
 import com.synopsys.method.analyzer.core.model.ReferencedMethod;
 import com.synopsys.method.analyzer.core.report.MetaDataReportJson;
+import com.synopsys.method.analyzer.core.report.MethodIdJson;
 import com.synopsys.method.analyzer.core.report.MethodIdsReportJson;
 import com.synopsys.method.analyzer.core.report.MethodReferencesReportJson;
 import com.synopsys.method.analyzer.core.report.ReferencedMethodUsesJson;
@@ -113,8 +114,12 @@ public class ReportGeneratorTest {
         Map<String, ReferencedMethodUsesJson> usesById = methodReferencesReport.getMethodUses().stream()
                 .collect(Collectors.toMap(use -> use.getMethod().getId(), Functions.identity()));
 
-        Assert.assertEquals(methodIdsReport.getMethodIds().size(), usesById.size());
-        Assert.assertTrue(methodIdsReport.getMethodIds().containsAll(usesById.keySet()));
+        Set<String> signatureIds = methodIdsReport.getMethodIds().stream()
+                .map(MethodIdJson::getSignature)
+                .collect(Collectors.toSet());
+
+        Assert.assertEquals(signatureIds.size(), usesById.size());
+        Assert.assertTrue(signatureIds.containsAll(usesById.keySet()));
 
         ReferencedMethodUsesJson resultJson = usesById.values().stream().findFirst().get();
 
@@ -197,6 +202,7 @@ public class ReportGeneratorTest {
         Assert.assertEquals(methodIdsReport2.getMethodIds().size(), 1000);
 
         Set<String> allIds = Stream.concat(methodIdsReport1.getMethodIds().stream(), methodIdsReport2.getMethodIds().stream())
+                .map(MethodIdJson::getSignature)
                 .collect(Collectors.toSet());
 
         Map<String, ReferencedMethodUsesJson> usesById = methodReferencesReport1.getMethodUses().stream()

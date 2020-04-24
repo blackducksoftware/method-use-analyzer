@@ -31,6 +31,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -43,6 +44,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
 import com.synopsys.method.analyzer.core.MethodUseAnalyzer;
+import com.synopsys.method.analyzer.core.report.MethodIdJson;
 import com.synopsys.method.analyzer.core.report.MethodIdsReportJson;
 import com.synopsys.method.analyzer.core.report.MethodReferencesReportJson;
 import com.synopsys.method.analyzer.core.report.ReferencedMethodUsesJson;
@@ -97,8 +99,12 @@ public class MethodUseAnalyzerTest {
         Map<String, ReferencedMethodUsesJson> usesById = methodReferencesReport.getMethodUses().stream()
                 .collect(Collectors.toMap(use -> use.getMethod().getId(), Functions.identity()));
 
-        Assert.assertEquals(methodIdsReport.getMethodIds().size(), usesById.size());
-        Assert.assertTrue(methodIdsReport.getMethodIds().containsAll(usesById.keySet()));
+        Set<String> signatureIds = methodIdsReport.getMethodIds().stream()
+                .map(MethodIdJson::getSignature)
+                .collect(Collectors.toSet());
+
+        Assert.assertEquals(signatureIds.size(), usesById.size());
+        Assert.assertTrue(signatureIds.containsAll(usesById.keySet()));
 
         // Expect specific number of external uses within results
         Assert.assertEquals(methodIdsReport.getMethodIds().size(), 10);
