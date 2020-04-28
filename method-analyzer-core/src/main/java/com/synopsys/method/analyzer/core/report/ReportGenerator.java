@@ -26,11 +26,9 @@ import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Base64;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -38,7 +36,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -46,8 +43,6 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
-import com.google.common.hash.HashCode;
-import com.google.common.hash.Hashing;
 import com.google.gson.Gson;
 import com.synopsys.method.analyzer.core.model.MethodUse;
 import com.synopsys.method.analyzer.core.model.ReferencedMethod;
@@ -107,51 +102,21 @@ public class ReportGenerator {
         Objects.requireNonNull(outputFileName);
 
         Path destinationFile = outputDirectory.resolve(outputFileName + EXTENSION);
-        List<String> uniqueMethodKeys = new LinkedList<>();
+        List<MethodIdJson> uniqueMethodKeys = new LinkedList<>();
         List<ReferencedMethodUsesJson> methodUses = new LinkedList<>();
 
         for (Entry<ReferencedMethod, Collection<MethodUse>> entry : references.asMap().entrySet()) {
             // Generation unique, opaque ID to match method uses against
-            String id = generateId(entry.getKey());
+            MethodIdJson id = new MethodIdJson(entry.getKey());
 
             // Add to segmented method use files
             uniqueMethodKeys.add(id);
 
             // Add to referenced uses file
-            methodUses.add(new ReferencedMethodUsesJson(id, entry.getKey(), entry.getValue()));
+            methodUses.add(new ReferencedMethodUsesJson(id.getSignature(), entry.getKey(), entry.getValue()));
         }
 
         return writeReport(destinationFile, uniqueMethodKeys, methodUses);
-    }
-
-    /**
-     * Generates a unique, opaque ID for a given referenced method
-     *
-     * <p>
-     * This generated ID is matched with algorithms on the KnowledgeBase cloud service - do NOT alter this generation
-     * without involving the KnowledgeBase team and versioning the report format
-     *
-     * @param method
-     *            The method to identify
-     * @return An unique, opaque ID
-     */
-    private String generateId(ReferencedMethod method) {
-        Objects.requireNonNull(method);
-
-        String inputsString = method.getInputs().stream()
-                .map(String::trim)
-                .collect(Collectors.joining(","));
-
-        String signature = new StringBuilder()
-                .append(method.getMethodOwner().trim()).append('.').append(method.getMethodName().trim())
-                .append('(').append(inputsString).append(')')
-                .append(':').append(method.getOutput().trim())
-                .toString();
-
-        HashCode sha256 = Hashing.sha256()
-                .hashString(signature, StandardCharsets.UTF_8);
-
-        return Base64.getEncoder().encodeToString(sha256.asBytes());
     }
 
     /**
@@ -167,7 +132,7 @@ public class ReportGenerator {
      * @throws IOException
      *             If there is an error writing the report
      */
-    private Path writeReport(Path destinationFile, List<String> uniqueMethodKeys, List<ReferencedMethodUsesJson> methodUses) throws IOException {
+    private Path writeReport(Path destinationFile, List<MethodIdJson> uniqueMethodKeys, List<ReferencedMethodUsesJson> methodUses) throws IOException {
         Objects.requireNonNull(destinationFile);
         Objects.requireNonNull(uniqueMethodKeys);
         Objects.requireNonNull(methodUses);
@@ -187,10 +152,10 @@ public class ReportGenerator {
         // Separate uses into chunks for more efficient processing within the application (without requiring opening and
         // manipulating the file)
 
-        List<List<String>> methodIdPartitions = Lists.partition(uniqueMethodKeys, REFERENCE_MAX_CHUNK_SIZE);
+        List<List<MethodIdJson>> methodIdPartitions = Lists.partition(uniqueMethodKeys, REFERENCE_MAX_CHUNK_SIZE);
 
         for (int index = 0; index < methodIdPartitions.size(); index++) {
-            List<String> idPartition = methodIdPartitions.get(index);
+            List<MethodIdJson> idPartition = methodIdPartitions.get(index);
 
             Path referencedMethodsFile = workingDirectory.resolve(REFERENCE_METHOD_LABEL + "-" + index + ".json");
             try (BufferedWriter writer = Files.newBufferedWriter(referencedMethodsFile)) {

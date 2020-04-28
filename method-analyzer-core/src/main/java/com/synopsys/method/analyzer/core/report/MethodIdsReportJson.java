@@ -41,13 +41,13 @@ import com.google.common.base.MoreObjects;
  */
 public final class MethodIdsReportJson {
 
-    private final List<String> methodIds;
+    private final List<MethodIdJson> methodIds;
 
-    public MethodIdsReportJson(List<String> methodIds) {
+    public MethodIdsReportJson(List<MethodIdJson> methodIds) {
         this.methodIds = Objects.requireNonNull(methodIds);
     }
 
-    public List<String> getMethodIds() {
+    public List<MethodIdJson> getMethodIds() {
         return methodIds;
     }
 
