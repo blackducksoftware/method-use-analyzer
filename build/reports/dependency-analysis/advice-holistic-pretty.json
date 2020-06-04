@@ -1,0 +1,20 @@
+[
+  {
+    "projectPath": ":method-analyzer-test-project",
+    "dependencyAdvice": [],
+    "pluginAdvice": [],
+    "shouldFail": false
+  },
+  {
+    "projectPath": ":method-analyzer-core",
+    "dependencyAdvice": [],
+    "pluginAdvice": [],
+    "shouldFail": false
+  },
+  {
+    "projectPath": ":",
+    "dependencyAdvice": [],
+    "pluginAdvice": [],
+    "shouldFail": false
+  }
+]
