@@ -1,4 +1,9 @@
+plugins {
+    id 'com.autonomousapps.dependency-analysis' version '0.46.0'
+}
+
 allprojects {
+    apply plugin: 'base'
     apply plugin: 'eclipse'
 
     // Always download sources, to allow debugging
@@ -11,6 +16,8 @@ allprojects {
     repositories {
         mavenCentral()
     }
+    
+    check.dependsOn buildHealth
 }
 
 subprojects {
@@ -20,7 +27,7 @@ subprojects {
     checkstyle {
         configFile = rootProject.file('config/checkstyle/checkstyle.xml')
         configProperties = [ 'checkstyle.config.dir' : rootProject.file('config/checkstyle') ]
-        toolVersion = '8.29'
+        toolVersion = '8.33'
     }
      
     task checkstyleAll{}
@@ -36,7 +43,12 @@ subprojects {
         }
     }
     
-    // TODO module name
+    // Set Java 9 automatic module name to prevent future collisions
+    jar {
+        manifest {
+            attributes("Automatic-Module-Name": "${project.group}.${project.name}".replaceAll("-", "."))
+        }
+    }
     
     tasks.withType(Jar).all {
         from("${rootDir}"){
