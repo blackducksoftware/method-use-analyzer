@@ -72,6 +72,7 @@ public class ReportGeneratorTest {
     public void simpleReport() throws Exception {
         Multimap<ReferencedMethod, MethodUse> references = HashMultimap.create();
         references.put(new ReferencedMethod("methodOwner", "methodName", Collections.singletonList("input"), "output"), new MethodUse("use", 1));
+        references.put(new ReferencedMethod("methodOwner2", "methodName2", Collections.singletonList("input2"), "output2"), new MethodUse("use", null));
 
         Path result = reportGenerator.generateReport(references, testReportDirectory, "simpleReport");
 
@@ -121,9 +122,9 @@ public class ReportGeneratorTest {
         Assert.assertEquals(signatureIds.size(), usesById.size());
         Assert.assertTrue(signatureIds.containsAll(usesById.keySet()));
 
-        ReferencedMethodUsesJson resultJson = usesById.values().stream().findFirst().get();
+        ReferencedMethodUsesJson resultJson = usesById.get("n0VJzGLYjELWet+V5A3IxQgkG/kQRR3P0OTmEpiScZs=");
 
-        Assert.assertEquals(usesById.size(), 1);
+        Assert.assertNotNull(resultJson, "Expected reference ID not found, check that ID generation logic in ReportGenerator was not changed unintentionally.");
         Assert.assertEquals(resultJson.getMethod().getId(), "n0VJzGLYjELWet+V5A3IxQgkG/kQRR3P0OTmEpiScZs=",
                 "Referenced Method ID was unexpected value, check that ID generation logic in ReportGenerator was not changed unintentionally.");
         Assert.assertEquals(resultJson.getMethod().getMethodName(), "methodName");
@@ -132,6 +133,19 @@ public class ReportGeneratorTest {
         Assert.assertEquals(resultJson.getMethod().getInputs(), Collections.singletonList("input"));
         Assert.assertEquals(resultJson.getUses().size(), 1);
         Assert.assertTrue(resultJson.getUses().contains(new MethodUseJson("use", 1)));
+
+        ReferencedMethodUsesJson resultJsonNullLineNumber = usesById.get("lnTAAs55NfVEpFXFtKvJ5KmvK6Z6En4jHzP2Xp3PL7g=");
+
+        Assert.assertNotNull(resultJsonNullLineNumber,
+                "Expected reference ID not found, check that ID generation logic in ReportGenerator was not changed unintentionally.");
+        Assert.assertEquals(resultJsonNullLineNumber.getMethod().getId(), "lnTAAs55NfVEpFXFtKvJ5KmvK6Z6En4jHzP2Xp3PL7g=",
+                "Referenced Method ID was unexpected value, check that ID generation logic in ReportGenerator was not changed unintentionally.");
+        Assert.assertEquals(resultJsonNullLineNumber.getMethod().getMethodName(), "methodName2");
+        Assert.assertEquals(resultJsonNullLineNumber.getMethod().getMethodOwner(), "methodOwner2");
+        Assert.assertEquals(resultJsonNullLineNumber.getMethod().getOutput(), "output2");
+        Assert.assertEquals(resultJsonNullLineNumber.getMethod().getInputs(), Collections.singletonList("input2"));
+        Assert.assertEquals(resultJsonNullLineNumber.getUses().size(), 1);
+        Assert.assertTrue(resultJsonNullLineNumber.getUses().contains(new MethodUseJson("use", null)));
     }
 
     @Test
