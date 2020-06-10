@@ -191,13 +191,14 @@ public class ReferencedMethodUsesJson {
 
         public MethodUseJson(String qualifiedMethodName, Integer lineNumber) {
             this.qualifiedMethodName = Objects.requireNonNull(qualifiedMethodName);
-            this.lineNumber = Objects.requireNonNull(lineNumber);
+            this.lineNumber = lineNumber;
         }
 
         public String getQualifiedMethodName() {
             return qualifiedMethodName;
         }
 
+        @Nullable
         public Integer getLineNumber() {
             return lineNumber;
         }
