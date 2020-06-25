@@ -35,6 +35,8 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import org.objectweb.asm.ClassReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Multimap;
@@ -59,6 +61,9 @@ public class MethodUseAnalyzer {
      * Regular expression intended to match files with the ".class" extension
      */
     private static final String CLASS_FILE_REGEX = ".*\\.class";
+
+    /** Logger reference to output information to the application log files */
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * Analyzes Java *.class files with the provided {@code sourceDirectory} for method calls made to classes not
@@ -126,7 +131,9 @@ public class MethodUseAnalyzer {
             references = bytecodeAnalyzer.getReferences();
         }
 
-        // TODO romeara logging (info/debug) of what was found
+        references.asMap().entrySet()
+                .forEach(entry -> logger.debug("Found {} references to {}.{}({})",
+                        entry.getValue().size(), entry.getKey().getMethodOwner(), entry.getKey().getMethodName(), entry.getKey().getInputs()));
 
         return reportGenerator.generateReport(references, outputDirectory, outputFileName);
     }
