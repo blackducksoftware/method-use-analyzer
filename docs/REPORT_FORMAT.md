@@ -10,7 +10,7 @@ The "meta data" report is located in the root of the report directory of the exp
   - The name of the host the analysis was performed on
 - analyzedDirectory
   - The local path of the directory analyzed
-- projectName
+- codeLocationName
   - Optional. A human-readable label for the project/directory analyzed
 
 ## Methods Report

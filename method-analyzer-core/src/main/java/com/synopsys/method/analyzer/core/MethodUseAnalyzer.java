@@ -71,14 +71,14 @@ public class MethodUseAnalyzer {
      *            The directory containing the *.class files to evaluate for external method calls
      * @param outputDirectory
      *            The directory to output the generated report of method calls to
-     * @param projectName
+     * @param codeLocationName
      *            A name to associate with the analyzed source in any generated reports
      * @return The full path to the generated report on the file system
      * @throws IOException
      *             If there is an error reading from input files, or saving the output report
      */
-    public Path analyze(Path sourceDirectory, Path outputDirectory, @Nullable String projectName) throws IOException {
-        return analyze(sourceDirectory, outputDirectory, "external-method-uses", projectName);
+    public Path analyze(Path sourceDirectory, Path outputDirectory, @Nullable String codeLocationName) throws IOException {
+        return analyze(sourceDirectory, outputDirectory, "external-method-uses", codeLocationName);
     }
 
     /**
@@ -91,13 +91,13 @@ public class MethodUseAnalyzer {
      *            The directory to output the generated report of method calls to
      * @param outputFileName
      *            The file name (without extension) to same the report as
-     * @param projectName
+     * @param codeLocationName
      *            A name to associate with the analyzed source in any generated reports
      * @return The full path to the generated report on the file system
      * @throws IOException
      *             If there is an error reading from input files, or saving the output report
      */
-    public Path analyze(Path sourceDirectory, Path outputDirectory, String outputFileName, @Nullable String projectName) throws IOException {
+    public Path analyze(Path sourceDirectory, Path outputDirectory, String outputFileName, @Nullable String codeLocationName) throws IOException {
         Objects.requireNonNull(sourceDirectory, "The sourceDirectory parameter is required, and may not be null");
         Objects.requireNonNull(outputDirectory, "The outputDirectory parameter is required, and may not be null");
         Objects.requireNonNull(outputFileName, "The outputFileName parameter is required, and may not be null");
@@ -106,7 +106,7 @@ public class MethodUseAnalyzer {
         Preconditions.checkArgument(Files.isDirectory(sourceDirectory), "The source path provided (%s) is not a directory", sourceDirectory.toString());
 
         Multimap<ReferencedMethod, MethodUse> references = null;
-        ReportGenerator reportGenerator = new ReportGenerator(InetAddress.getLocalHost().getHostName(), sourceDirectory.toString(), projectName);
+        ReportGenerator reportGenerator = new ReportGenerator(InetAddress.getLocalHost().getHostName(), sourceDirectory.toString(), codeLocationName);
 
         try (Stream<Path> files = Files.walk(sourceDirectory)) {
             List<Path> classFiles = files

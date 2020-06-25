@@ -65,7 +65,7 @@ public class ReportGeneratorTest {
     @BeforeClass
     public void setup() throws Exception {
         testReportDirectory = Files.createTempDirectory("blackduck-method-uses-test");
-        reportGenerator = new ReportGenerator("hostName", "analyzedDirectory", "projectName");
+        reportGenerator = new ReportGenerator("hostName", "analyzedDirectory", "codeLocationName");
     }
 
     @Test
@@ -110,7 +110,7 @@ public class ReportGeneratorTest {
 
         Assert.assertEquals(metaDataReport.getHostName(), "hostName");
         Assert.assertEquals(metaDataReport.getAnalyzedDirectory(), "analyzedDirectory");
-        Assert.assertEquals(metaDataReport.getProjectName(), "projectName");
+        Assert.assertEquals(metaDataReport.getCodeLocationName(), "codeLocationName");
 
         Map<String, ReferencedMethodUsesJson> usesById = methodReferencesReport.getMethodUses().stream()
                 .collect(Collectors.toMap(use -> use.getMethod().getId(), Functions.identity()));
@@ -209,7 +209,7 @@ public class ReportGeneratorTest {
 
         Assert.assertEquals(metaDataReport.getHostName(), "hostName");
         Assert.assertEquals(metaDataReport.getAnalyzedDirectory(), "analyzedDirectory");
-        Assert.assertEquals(metaDataReport.getProjectName(), "projectName");
+        Assert.assertEquals(metaDataReport.getCodeLocationName(), "codeLocationName");
 
         // Check partitioning numbers are correct
         Assert.assertEquals(methodIdsReport1.getMethodIds().size(), 1000);
