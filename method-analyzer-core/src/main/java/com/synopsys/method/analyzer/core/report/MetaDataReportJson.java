@@ -44,12 +44,12 @@ public class MetaDataReportJson {
     private final String analyzedDirectory;
 
     @Nullable
-    private final String projectName;
+    private final String codeLocationName;
 
-    public MetaDataReportJson(String hostName, String analyzedDirectory, @Nullable String projectName) {
+    public MetaDataReportJson(String hostName, String analyzedDirectory, @Nullable String codeLocationName) {
         this.hostName = Objects.requireNonNull(hostName);
         this.analyzedDirectory = Objects.requireNonNull(analyzedDirectory);
-        this.projectName = projectName;
+        this.codeLocationName = codeLocationName;
     }
 
     public String getHostName() {
@@ -61,15 +61,15 @@ public class MetaDataReportJson {
     }
 
     @Nullable
-    public String getProjectName() {
-        return projectName;
+    public String getCodeLocationName() {
+        return codeLocationName;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getHostName(),
                 getAnalyzedDirectory(),
-                getProjectName());
+                getCodeLocationName());
     }
 
     @Override
@@ -81,7 +81,7 @@ public class MetaDataReportJson {
 
             result = Objects.equals(compare.getHostName(), getHostName())
                     && Objects.equals(compare.getAnalyzedDirectory(), getAnalyzedDirectory())
-                    && Objects.equals(compare.getProjectName(), getProjectName());
+                    && Objects.equals(compare.getCodeLocationName(), getCodeLocationName());
         }
 
         return result;
@@ -92,7 +92,7 @@ public class MetaDataReportJson {
         return MoreObjects.toStringHelper(getClass()).omitNullValues()
                 .add("hostName", getHostName())
                 .add("analyzedDirectory", getAnalyzedDirectory())
-                .add("projectName", getProjectName())
+                .add("codeLocationName", getCodeLocationName())
                 .toString();
     }
 

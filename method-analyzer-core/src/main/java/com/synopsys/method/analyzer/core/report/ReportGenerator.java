@@ -76,11 +76,11 @@ public class ReportGenerator {
      *            The name of the host the analysis was performed on. Used in report meta-data
      * @param analyzedDirectory
      *            The directory which was analyzed. Used in report meta-data
-     * @param projectName
+     * @param codeLocationName
      *            A name to associate with the analyzed source. May be null. Used in report meta-data
      */
-    public ReportGenerator(String hostName, String analyzedDirectory, @Nullable String projectName) {
-        this.metaDataReport = new MetaDataReportJson(hostName, analyzedDirectory, projectName);
+    public ReportGenerator(String hostName, String analyzedDirectory, @Nullable String codeLocationName) {
+        this.metaDataReport = new MetaDataReportJson(hostName, analyzedDirectory, codeLocationName);
     }
 
     /**
