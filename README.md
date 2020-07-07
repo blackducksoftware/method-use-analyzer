@@ -1,6 +1,6 @@
 # Method Use Analyzer
 
-![GitHub Actions](https://github.com/blackducksoftware/method-use-analyzer/workflows/Java%20CI/badge.svg?branch=master) [![Black Duck Security Risk](https://copilot.blackducksoftware.com/github/repos/blackducksoftware/method-use-analyzer/branches/master/badge-risk.svg)](https://copilot.blackducksoftware.com/github/repos/blackducksoftware/method-use-analyzer/branches/master) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+![GitHub Actions](https://github.com/blackducksoftware/method-use-analyzer/workflows/Java%20CI/badge.svg?branch=master) [![Black Duck Security Risk](https://copilot.blackducksoftware.com/github/repos/blackducksoftware/method-use-analyzer/branches/master/badge-risk.svg)](https://copilot.blackducksoftware.com/github/repos/blackducksoftware/method-use-analyzer/branches/master) [![Changelog validated by Chronicler](https://chronicler.starchartlabs.org/images/changelog-chronicler-success.png)](https://chronicler.starchartlabs.org/) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 The method use analyzer library evaluates a Java project and produces a report of the method calls made to Java code not present within the project
 
