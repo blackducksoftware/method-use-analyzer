@@ -49,9 +49,9 @@ import com.synopsys.method.analyzer.core.report.ReportGenerator;
  * Represents functionality to analyze and report on the external method calls made within a Java project
  *
  * <p>
- * This class is intended as the primary use interface for method analysis operations. Both {@link #analyze(Path, Path)}
- * and {@link #analyze(Path, Path, String)} may be used to evaluate and report on a target directory's use of methods
- * which are defined within the given directory
+ * This class is intended as the primary use interface for method analysis operations. Both
+ * {@link #analyze(Path, Path, String)} and {@link #analyze(Path, Path, String, String)} may be used to evaluate and
+ * report on a target directory's use of methods which are defined within the given directory
  *
  * @author romeara
  */
@@ -70,7 +70,8 @@ public class MethodUseAnalyzer {
      * defined within the provided class file set
      *
      * <p>
-     * Output will be saved with a default file name - to specify a file name, use {@link #analyze(Path, Path, String)}
+     * Output will be saved with a default file name - to specify a file name, use
+     * {@link #analyze(Path, Path, String, String)}
      *
      * @param sourceDirectory
      *            The directory containing the *.class files to evaluate for external method calls
