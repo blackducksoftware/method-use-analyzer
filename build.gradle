@@ -1,5 +1,7 @@
 plugins {
     id 'com.autonomousapps.dependency-analysis' version '0.46.0'
+    id 'io.codearte.nexus-staging' version "0.21.1"
+    id 'de.marcphilipp.nexus-publish' version "0.4.0"
 }
 
 allprojects {
@@ -48,6 +50,15 @@ subprojects {
         manifest {
             attributes("Automatic-Module-Name": "${project.group}.${project.name}".replaceAll("-", "."))
         }
+    }
+
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    task myJavadocs(type: Javadoc) {
+      source = sourceSets.main.allJava
     }
     
     tasks.withType(Jar).all {

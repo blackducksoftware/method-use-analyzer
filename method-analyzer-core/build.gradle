@@ -1,4 +1,6 @@
-apply plugin: 'maven-publish'
+plugins{
+    id 'maven-publish'
+}
 
 description = 'Library which analyzes Java projects for method calls to external methods'
 
@@ -23,6 +25,11 @@ dependencies {
 // This requires setting up TestNG run/debug properties within IDE imports to execute tests
 test {
     systemProperty 'com.synopsys.method.analyzer.test.project.dir', "${project(':method-analyzer-test-project').projectDir}"
+}
+
+java{
+    withJavadocJar()
+    withSourcesJar()
 }
 
 publishing {
