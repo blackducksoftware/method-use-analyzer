@@ -57,7 +57,7 @@ subprojects {
         from sourceSets.main.allSource
     }
 
-    task myJavadocs(type: Javadoc) {
+    task javadocJar(type: Javadoc) {
       source = sourceSets.main.allJava
     }
     
