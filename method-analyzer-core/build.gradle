@@ -1,8 +1,15 @@
 plugins{
     id 'maven-publish'
+    id 'de.marcphilipp.nexus-publish' version "0.4.0"
 }
 
 description = 'Library which analyzes Java projects for method calls to external methods'
+
+apply plugin: 'signing'
+            
+ext."signing.keyId" = signingKeyId
+ext."signing.secretKeyRingFile" = secretKeyRingFile
+ext."signing.password" = signingPassword
 
 dependencies {
     compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
@@ -27,19 +34,26 @@ test {
     systemProperty 'com.synopsys.method.analyzer.test.project.dir', "${project(':method-analyzer-test-project').projectDir}"
 }
 
-java{
-    withJavadocJar()
-    withSourcesJar()
-}
+// java{
+//     withJar()
+//     withJavadocJar()
+//     withSourcesJar()
+// }
 
 publishing {
     publications {
         maven(MavenPublication) {
             from components.java
-            
-            //TODO romeara source artifacts
-            //artifact project.sourcesJar
-            //artifact project.javadocJar
+            artifact javadocJar
+            artifact sourcesJar
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
             
             pom {
                 name = project.name
