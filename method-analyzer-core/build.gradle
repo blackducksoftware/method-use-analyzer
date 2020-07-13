@@ -5,12 +5,6 @@ plugins{
 
 description = 'Library which analyzes Java projects for method calls to external methods'
 
-apply plugin: 'signing'
-            
-ext."signing.keyId" = signingKeyId
-ext."signing.secretKeyRingFile" = secretKeyRingFile
-ext."signing.password" = signingPassword
-
 dependencies {
     compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 
@@ -33,12 +27,6 @@ dependencies {
 test {
     systemProperty 'com.synopsys.method.analyzer.test.project.dir', "${project(':method-analyzer-test-project').projectDir}"
 }
-
-// java{
-//     withJar()
-//     withJavadocJar()
-//     withSourcesJar()
-// }
 
 publishing {
     publications {
