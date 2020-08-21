@@ -23,6 +23,7 @@
 package com.synopsys.method.analyzer.core.report;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -30,16 +31,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import javax.annotation.Nullable;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
@@ -68,6 +74,9 @@ public class ReportGenerator {
     private static final int REFERENCE_MAX_CHUNK_SIZE = 1000;
 
     private static final Gson GSON = new Gson();
+
+    /** Logger reference to output information to the application log files */
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private final MetaDataReportJson metaDataReport;
 
@@ -177,6 +186,17 @@ public class ReportGenerator {
         }
 
         writeZipFile(destinationFile, outputFileMapping);
+
+        // GH-22: Explicitly clean up temporary files once use of them is complete
+        try {
+            try (Stream<Path> walk = Files.walk(workingDirectory)) {
+                walk.sorted(Comparator.reverseOrder())
+                        .map(Path::toFile)
+                        .forEach(File::delete);
+            }
+        } catch (IOException e) {
+            logger.warn("Error cleaning up temporary report files", e);
+        }
 
         return destinationFile;
     }
