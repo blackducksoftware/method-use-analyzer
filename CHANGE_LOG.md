@@ -5,5 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- (GH-22) Added automatic cleanup of temporary files
+
+## [0.1.0]
 ### Added
 - Ability to analyze built source for external method calls, outputting to a formatted report
