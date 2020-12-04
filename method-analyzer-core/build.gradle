@@ -8,8 +8,8 @@ description = 'Library which analyzes Java projects for method calls to external
 dependencies {
     compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 
-    api 'com.google.guava:guava:29.0-jre'
-    api 'org.ow2.asm:asm:8.0.1'
+    api 'com.google.guava:guava:30.0-jre'
+    api 'org.ow2.asm:asm:9.0'
 
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'org.slf4j:slf4j-api:1.7.30'
@@ -17,7 +17,7 @@ dependencies {
     testImplementation project(':method-analyzer-test-project')
     testImplementation 'org.slf4j:slf4j-api:1.7.30'
     testImplementation 'org.slf4j:slf4j-simple:1.7.30'
-    testImplementation 'org.testng:testng:6.14.3'
+    testImplementation 'org.testng:testng:7.3.0'
     testImplementation 'org.slf4j:slf4j-simple:1.7.30'
 }
 

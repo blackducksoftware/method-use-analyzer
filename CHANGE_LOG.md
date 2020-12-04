@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- Updated `com.google.guava:guava` and `org.ow2.asm:asm` dependencies to latest versions (`30.0-jre` and `9.0`, respectively)
 
 ## [0.1.1]
 ### Changed
