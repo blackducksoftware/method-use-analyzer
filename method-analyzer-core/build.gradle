@@ -19,6 +19,9 @@ dependencies {
     testImplementation 'org.slf4j:slf4j-simple:1.7.30'
     testImplementation 'org.testng:testng:7.3.0'
     testImplementation 'org.slf4j:slf4j-simple:1.7.30'
+    
+    // Overrides vulnerable version 1.21 in transitive dependencies of TestNG
+    testImplementation 'org.yaml:snakeyaml:1.26'
 }
 
 // TODO romeara Add to contribution doc
