@@ -14,19 +14,7 @@ To use this library, it must be added as a dependency reference, and then invoke
 
 ### Dependency Reference
 
-This library is in ALPHA - it is currently necessary to download this repository and run `./gradlew clean build publish` to load the built jar into your local maven repository, and then add the following to your Gradle configuration:
-
-```
-repositories {
-    mavenLocal()
-}
-
-dependencies {
-	compile 'com.synopsys:method-analyzer-core:0.1.0-SNAPSHOT'
-}
-```
-
-The GA version of this library will be available via more standard repositories, such as Maven Central
+This library is available in Maven Central under the GAV `com.synopsys:method-analyzer-core:<version>`
 
 ### Analysis Execution
 

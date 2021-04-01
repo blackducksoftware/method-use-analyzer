@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- Updated `com.google.guava:guava` from `30.0-jre` to `30.1.1-jre`
+- Updated `org.ow2.asm:asm` from `9.0` to `9.1`
+- Updated `org.testng:testng` from `7.3.0` to `7.4.0`
+- Updated override of transitive dependency on `org.yaml:snakeyaml` from `1.26` to `1.28`
 
 ## [0.1.2]
 ### Changed
