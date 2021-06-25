@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- Updated `com.google.code.gson:gson` from `2.8.6` to `2.8.7`
+- Updated `org.slf4j:slf4j-api` and associated libraries from `1.7.30` to `1.7.31`
+- Updated override of transitive dependency on `org.yaml:snakeyaml` from `1.28` to `1.29`
 
 ## [0.1.3]
 ### Changed

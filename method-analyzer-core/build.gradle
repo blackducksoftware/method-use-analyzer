@@ -11,17 +11,17 @@ dependencies {
     api 'com.google.guava:guava:30.1.1-jre'
     api 'org.ow2.asm:asm:9.1'
 
-    implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'org.slf4j:slf4j-api:1.7.30'
+    implementation 'com.google.code.gson:gson:2.8.7'
+    implementation 'org.slf4j:slf4j-api:1.7.31'
 
     testImplementation project(':method-analyzer-test-project')
-    testImplementation 'org.slf4j:slf4j-api:1.7.30'
-    testImplementation 'org.slf4j:slf4j-simple:1.7.30'
+    testImplementation 'org.slf4j:slf4j-api:1.7.31'
+    testImplementation 'org.slf4j:slf4j-simple:1.7.31'
     testImplementation 'org.testng:testng:7.4.0'
-    testImplementation 'org.slf4j:slf4j-simple:1.7.30'
+    testImplementation 'org.slf4j:slf4j-simple:1.7.31'
     
     // Overrides vulnerable version 1.21 in transitive dependencies of TestNG
-    testImplementation 'org.yaml:snakeyaml:1.28'
+    testImplementation 'org.yaml:snakeyaml:1.29'
 }
 
 // TODO romeara Add to contribution doc
