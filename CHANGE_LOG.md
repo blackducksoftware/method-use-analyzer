@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- Updated `org.ow2.asm:asm` from `9.1` to `9.2`
 
 ## [0.1.4]
 ### Changed
