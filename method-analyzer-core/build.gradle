@@ -8,20 +8,19 @@ description = 'Library which analyzes Java projects for method calls to external
 dependencies {
     compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 
-    api 'com.google.guava:guava:31.0-jre'
-    api 'org.ow2.asm:asm:9.2'
+    api 'com.google.guava:guava:31.1-jre'
+    api 'org.ow2.asm:asm:9.3'
 
-    implementation 'com.google.code.gson:gson:2.8.8'
-    implementation 'org.slf4j:slf4j-api:1.7.32'
+    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'org.slf4j:slf4j-api:1.7.36'
 
     testImplementation project(':method-analyzer-test-project')
-    testImplementation 'org.slf4j:slf4j-api:1.7.32'
-    testImplementation 'org.slf4j:slf4j-simple:1.7.32'
-    testImplementation 'org.testng:testng:7.4.0'
-    testImplementation 'org.slf4j:slf4j-simple:1.7.32'
+    testImplementation 'org.slf4j:slf4j-api:1.7.36'
+    testImplementation 'org.slf4j:slf4j-simple:1.7.36'
+    testImplementation 'org.testng:testng:7.5'
     
     // Overrides vulnerable version 1.21 in transitive dependencies of TestNG
-    testImplementation 'org.yaml:snakeyaml:1.29'
+    testImplementation 'org.yaml:snakeyaml:1.30'
 }
 
 // TODO romeara Add to contribution doc
