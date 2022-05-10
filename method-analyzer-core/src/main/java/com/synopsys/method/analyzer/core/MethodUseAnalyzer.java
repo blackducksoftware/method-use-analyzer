@@ -27,7 +27,9 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -39,6 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 import com.google.common.collect.Multimap;
 import com.synopsys.method.analyzer.core.bytecode.ClassMethodReferenceVisitor;
 import com.synopsys.method.analyzer.core.model.MethodUse;
@@ -112,6 +115,7 @@ public class MethodUseAnalyzer {
         Preconditions.checkArgument(Files.isDirectory(sourceDirectory), "The source path provided (%s) is not a directory", sourceDirectory.toString());
 
         Multimap<ReferencedMethod, MethodUse> references = null;
+        Map<Path, String> brokenFiles = new HashMap<>();
         ReportGenerator reportGenerator = new ReportGenerator(InetAddress.getLocalHost().getHostName(), sourceDirectory.toString(), codeLocationName);
 
         try (Stream<Path> files = Files.walk(sourceDirectory)) {
@@ -126,6 +130,14 @@ public class MethodUseAnalyzer {
                 try (InputStream inputStream = Files.newInputStream(classFile)) {
                     ClassReader reader = new ClassReader(inputStream);
                     reader.accept(bytecodeAnalyzer, 0);
+                } catch (IllegalArgumentException e) {
+                    // IDETECT-3275: Instead of killing an entire analysis because of a single broken file, record the
+                    // broken file and move on
+                    if (Strings.nullToEmpty(e.getMessage()).startsWith("Unsupported class file major version")) {
+                        brokenFiles.put(classFile, Strings.nullToEmpty(e.getMessage()));
+                    } else {
+                        throw e;
+                    }
                 }
             }
 
@@ -136,7 +148,7 @@ public class MethodUseAnalyzer {
                 .forEach(entry -> logger.debug("Found {} references to {}.{}({})",
                         entry.getValue().size(), entry.getKey().getMethodOwner(), entry.getKey().getMethodName(), entry.getKey().getInputs()));
 
-        return reportGenerator.generateReport(references, outputDirectory, outputFileName);
+        return reportGenerator.generateReport(references, brokenFiles, outputDirectory, outputFileName);
     }
 
 }

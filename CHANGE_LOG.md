@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- (GH-28) Record files which failed to parse in a report, instead of failing the entire analysis
 
 ## [0.1.7]
 ### Changed
