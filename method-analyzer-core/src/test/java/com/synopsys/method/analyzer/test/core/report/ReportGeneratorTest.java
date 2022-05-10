@@ -28,6 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -159,7 +160,7 @@ public class ReportGeneratorTest {
         references.put(new ReferencedMethod("methodOwner2", "methodName2", Collections.singletonList("input2"), "output2"), new MethodUse("use", null));
 
         Map<Path, String> brokenFiles = new HashMap<>();
-        brokenFiles.put(Path.of("broken/BFile.class"), "Caused by TestException at MethodUseAnalyzer.java:123");
+        brokenFiles.put(Paths.get("broken/BFile.class"), "Caused by TestException at MethodUseAnalyzer.java:123");
 
         Path result = reportGenerator.generateReport(references, brokenFiles, testReportDirectory, "simpleReport");
 
@@ -259,7 +260,7 @@ public class ReportGeneratorTest {
         for (int i = 0; i < 2000; i++) {
             references.put(new ReferencedMethod("methodOwner" + i, "methodName" + i, Collections.singletonList("input" + i), "output" + i),
                     new MethodUse("use" + i, i));
-            brokenFiles.put(Path.of("broken/BFile" + i + ".class"), "Caused by TestException at MethodUseAnalyzer.java:123 " + i);
+            brokenFiles.put(Paths.get("broken/BFile" + i + ".class"), "Caused by TestException at MethodUseAnalyzer.java:123 " + i);
         }
 
         Path result = reportGenerator.generateReport(references, brokenFiles, testReportDirectory, "simpleReport");
