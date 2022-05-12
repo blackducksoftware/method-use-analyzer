@@ -31,6 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -38,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -67,11 +69,15 @@ public class ReportGenerator {
 
     private static final String REFERENCE_METHOD_USE_LABEL = "referenced-method-uses";
 
+    private static final String BROKEN_FILE_LABEL = "broken-files";
+
     // TODO romeara - In the future, should we investigate dynamic call-through to make this an actual handshake, and
     // not a manual constant? Aka ask the service what is allowed?
     // This is determined in conjunction with what the KB cloud services will allow - DO NOT adjust this number without
     // consultation with the maximum allowed by that service
     private static final int REFERENCE_MAX_CHUNK_SIZE = 1000;
+
+    private static final int BROKEN_FILE_MAX_CHUNK_SIZE = 1000;
 
     private static final Gson GSON = new Gson();
 
@@ -104,9 +110,33 @@ public class ReportGenerator {
      * @return The path of the generated report on the file system
      * @throws IOException
      *             If there is an error writing the report to the file system
+     * @deprecated Use {@link #generateReport(Multimap, Map, Path, String)} instead
      */
+    @Deprecated
     public Path generateReport(Multimap<ReferencedMethod, MethodUse> references, Path outputDirectory, String outputFileName) throws IOException {
+        return generateReport(references, Collections.emptyMap(), outputDirectory, outputFileName);
+    }
+
+    /**
+     * Generates a report of the provided method references within a project
+     *
+     * @param references
+     *            The references to describe in a report
+     * @param brokenFiles
+     *            Paths of any files for which analysis was attempted, by failed due to parser incompatibly of broken
+     *            file formatting (mapped to a message indicating the specific error)
+     * @param outputDirectory
+     *            The directory to output the report to
+     * @param outputFileName
+     *            The file name to use for the report (without extension)
+     * @return The path of the generated report on the file system
+     * @throws IOException
+     *             If there is an error writing the report to the file system
+     */
+    public Path generateReport(Multimap<ReferencedMethod, MethodUse> references, Map<Path, String> brokenFiles, Path outputDirectory, String outputFileName)
+            throws IOException {
         Objects.requireNonNull(references);
+        Objects.requireNonNull(brokenFiles);
         Objects.requireNonNull(outputDirectory);
         Objects.requireNonNull(outputFileName);
 
@@ -125,7 +155,11 @@ public class ReportGenerator {
             methodUses.add(new ReferencedMethodUsesJson(id.getSignature(), entry.getKey(), entry.getValue()));
         }
 
-        return writeReport(destinationFile, uniqueMethodKeys, methodUses);
+        List<BrokenFileJson> brokenFileRecords = brokenFiles.entrySet().stream()
+                .map(entry -> new BrokenFileJson(entry.getKey().toString(), entry.getValue()))
+                .collect(Collectors.toList());
+
+        return writeReport(destinationFile, uniqueMethodKeys, methodUses, brokenFileRecords);
     }
 
     /**
@@ -137,14 +171,18 @@ public class ReportGenerator {
      *            List of unique, opaque keys referencing discovered methods
      * @param methodUses
      *            Detailed description(s) of the method uses discovered
+     * @param brokenFiles
+     *            Description of files which failed to parse
      * @return The path the report was written to
      * @throws IOException
      *             If there is an error writing the report
      */
-    private Path writeReport(Path destinationFile, List<MethodIdJson> uniqueMethodKeys, List<ReferencedMethodUsesJson> methodUses) throws IOException {
+    private Path writeReport(Path destinationFile, List<MethodIdJson> uniqueMethodKeys, List<ReferencedMethodUsesJson> methodUses,
+            List<BrokenFileJson> brokenFiles) throws IOException {
         Objects.requireNonNull(destinationFile);
         Objects.requireNonNull(uniqueMethodKeys);
         Objects.requireNonNull(methodUses);
+        Objects.requireNonNull(brokenFiles);
 
         Map<Path, Path> outputFileMapping = new HashMap<>();
 
@@ -182,6 +220,18 @@ public class ReportGenerator {
             try (BufferedWriter writer = Files.newBufferedWriter(referencedMethodUsesFile)) {
                 GSON.toJson(new MethodReferencesReportJson(methodUsePartition), writer);
                 outputFileMapping.put(referencedMethodUsesFile, Paths.get(REFERENCE_METHOD_USE_LABEL).resolve(referencedMethodUsesFile.getFileName()));
+            }
+        }
+
+        List<List<BrokenFileJson>> brokenFilePartitions = Lists.partition(brokenFiles, BROKEN_FILE_MAX_CHUNK_SIZE);
+
+        for (int index = 0; index < brokenFilePartitions.size(); index++) {
+            List<BrokenFileJson> brokenFilePartition = brokenFilePartitions.get(index);
+
+            Path brokenFilesFile = workingDirectory.resolve(BROKEN_FILE_LABEL + "-" + index + ".json");
+            try (BufferedWriter writer = Files.newBufferedWriter(brokenFilesFile)) {
+                GSON.toJson(new BrokenFilesReportJson(brokenFilePartition), writer);
+                outputFileMapping.put(brokenFilesFile, Paths.get(BROKEN_FILE_LABEL).resolve(brokenFilesFile.getFileName()));
             }
         }
 

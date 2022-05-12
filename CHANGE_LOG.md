@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Changed
+- (GH-28) Record files which failed to parse in a report, instead of failing the entire analysis
 - Updated `com.google.guava:guava` from `31.0-jre` to `31.1-jre`
 - Updated `org.ow2.asm:asm` from `9.2` to `9.3`
 - Updated `org.slf4j:slf4j-api` from `1.7.32` to `1.7.36`

@@ -54,6 +54,17 @@ The "method uses" report(s) are within the `referenced-method-uses` directory of
   - The qualified class and method name the reference is located in
 - methodUses[].uses[].lineNumber
   - Optional - the line number the reference is made on within the source file
+  
+## Broken Files Report
+
+The "broken files" report(s) are within the "broken-files" directory of the expanded report file. Each of these files is a JSON file, containing several elements:
+
+- brokenFiles[]
+  - Array of all broken files described by this report
+- brokenFiles[].path
+  - Path of the file which failed to parse
+- brokenFiles[].error
+  - Optional. Short text string describing the error which prevented parsing
 
 ## ID Generation
 
