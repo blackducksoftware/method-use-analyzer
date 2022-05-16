@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [0.2.0]
 ### Changed
 - (GH-28) Record files which failed to parse in a report, instead of failing the entire analysis
 - Updated `com.google.guava:guava` from `31.0-jre` to `31.1-jre`
