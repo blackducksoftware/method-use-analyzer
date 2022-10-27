@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- Updated `org.ow2.asm:asm` from `9.3` to `9.4`
+- Updated `com.google.code.gson:gson` from `2.9` to `2.10`
+- Updated override of `org.yaml:snakeyaml` transitive dependency from `1.30` to `1.33`
 
 ## [0.2.0]
 ### Changed
