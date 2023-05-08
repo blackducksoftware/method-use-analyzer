@@ -17,7 +17,10 @@ dependencies {
     testImplementation project(':method-analyzer-test-project')
     testImplementation 'org.slf4j:slf4j-api:1.7.36'
     testImplementation 'org.slf4j:slf4j-simple:1.7.36'
-    testImplementation 'org.testng:testng:7.7.1'
+    testImplementation 'org.testng:testng:7.5'
+    
+    // Overrides vulnerable version 1.21 in transitive dependencies of TestNG
+    testImplementation 'org.yaml:snakeyaml:1.33'
 }
 
 // TODO romeara Add to contribution doc
