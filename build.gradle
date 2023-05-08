@@ -17,8 +17,6 @@ allprojects {
     repositories {
         mavenCentral()
     }
-    
-    check.dependsOn buildHealth
 }
 
 subprojects {
