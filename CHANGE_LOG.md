@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Changed
+- Update opcode to allow use of ASM 9 API
+
+## [0.2.7]
+### Changed
 - Updated `org.ow2.asm:asm` from `9.5` to `9.6`
 
 ## [0.2.6]
