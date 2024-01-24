@@ -52,7 +52,7 @@ import com.synopsys.method.analyzer.core.model.ReferencedMethod;
  */
 public class ClassMethodReferenceVisitor extends ClassVisitor {
 
-    private static final int DEFAULT_ASM_API = Opcodes.ASM7;
+    private static final int DEFAULT_ASM_API = Opcodes.ASM9;
 
     private final MethodReferenceRegistry referenceRegistry;
 
