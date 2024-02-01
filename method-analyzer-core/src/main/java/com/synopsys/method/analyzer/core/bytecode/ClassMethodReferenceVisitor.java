@@ -36,6 +36,8 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Multimap;
 import com.synopsys.method.analyzer.core.model.MethodUse;
@@ -120,6 +122,9 @@ public class ClassMethodReferenceVisitor extends ClassVisitor {
      */
     private static class MethodReferenceVisitor extends MethodVisitor {
 
+        /** Logger reference to output information to the application log files */
+        private final Logger logger = LoggerFactory.getLogger(getClass());
+
         private final MethodReferenceRegistry referenceRegistry;
 
         private final String currentClassName;
@@ -194,8 +199,8 @@ public class ClassMethodReferenceVisitor extends ClassVisitor {
             // Treat all arrays as "object", instead of a unique array "class"
             String effectiveOwner = (owner.startsWith("[") ? "java/lang/Object" : owner);
 
-            Type returnType = Type.getReturnType(descriptor);
-            Type[] arguments = Type.getArgumentTypes(descriptor);
+            Type returnType = getReturnType(descriptor);
+            Type[] arguments = getArgumentTypes(descriptor);
 
             List<String> argumentList = Stream.of(arguments)
                     .map(Type::getClassName)
@@ -204,6 +209,38 @@ public class ClassMethodReferenceVisitor extends ClassVisitor {
             String useReference = currentClassName + "." + currentMethodName;
 
             referenceRegistry.registerReference(formatQualifiedName(effectiveOwner), name, argumentList, returnType.getClassName(), useReference, currentLine);
+        }
+
+        private Type getReturnType(String descriptor) {
+            try {
+                return Type.getReturnType(descriptor);
+            } catch (StringIndexOutOfBoundsException e) {
+                // IDETECT-3909 This can occur for malformed signatures which are just the type, not the method, for an
+                // unknown reason
+                logger.warn("Malformed method descriptor, attempting type-only processing: {}:{} ({})", currentClassName, currentMethodName, descriptor);
+
+                try {
+                    return Type.getType(descriptor);
+                } catch (StringIndexOutOfBoundsException e2) {
+                    // IDETECT-3909 This can occur for malformed signatures which are just the type, not the method, for
+                    // an unknown reason
+                    logger.warn("Malformed method descriptor, skipping reference processing: {}:{} ({})", currentClassName, currentMethodName, descriptor);
+
+                    return Type.getType(descriptor);
+                }
+            }
+        }
+
+        private Type[] getArgumentTypes(String descriptor) {
+            try {
+                return Type.getArgumentTypes(descriptor);
+            } catch (StringIndexOutOfBoundsException e) {
+                // IDETECT-3909 This can occur for malformed signatures which are just the type, not the method, for an
+                // unknown reason
+                logger.warn("Malformed method descriptor, skipping arguments: {}:{} ({})", currentClassName, currentMethodName, descriptor);
+
+                return new Type[] {};
+            }
         }
 
     }
