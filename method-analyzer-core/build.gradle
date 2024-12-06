@@ -27,7 +27,7 @@ dependencies {
 // Configure tests with directory for test project
 // This requires setting up TestNG run/debug properties within IDE imports to execute tests
 test {
-    systemProperty 'com.synopsys.method.analyzer.test.project.dir', "${project(':method-analyzer-test-project').projectDir}"
+    systemProperty 'com.blackduck.method.analyzer.test.project.dir', "${project(':method-analyzer-test-project').projectDir}"
 }
 
 publishing {
