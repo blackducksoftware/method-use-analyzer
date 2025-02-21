@@ -34,4 +34,4 @@ In general, pull requests should:
 
 ## Conduct
 
-We expect both outside contributors and blackducksoftware members to treat each with respect and promote constructive discussion. Please report any inappropriate interactions (with a link to the offending pull request, etc, if possible) to `oss@synopsys.com`
+We expect both outside contributors and blackducksoftware members to treat each with respect and promote constructive discussion. Please report any inappropriate interactions (with a link to the offending pull request, etc, if possible) to `oss@blackduck.com`

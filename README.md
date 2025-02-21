@@ -14,7 +14,7 @@ To use this library, it must be added as a dependency reference, and then invoke
 
 ### Dependency Reference
 
-This library is available in Maven Central under the GAV `com.synopsys:method-analyzer-core:<version>`
+This library is available in Maven Central under the GAV `com.blackducksoftware:method-analyzer-core:<version>`
 
 ### Analysis Execution
 
@@ -37,7 +37,7 @@ Information for how to contribute to this library can be found in [the contribut
 
 ## Reporting Vulnerabilities
 
-If you discover a security vulnerability, contact the development team by e-mail at `oss@synopsys.com`
+If you discover a security vulnerability, contact the development team by e-mail at `oss@blackduck.com`
 
 ## Legal
 
@@ -45,10 +45,10 @@ This library is distributed under the [Apache 2.0 License](https://www.apache.or
 
 ```
 method-use-analyzer
-Copyright 2020 Synopsys, Inc.
+Copyright 2020 Black Duck Software, Inc.
 
 This product includes software developed at
-Synopsys, Inc. (http://www.synopsys.com/).
+Black Duck Software, Inc. (http://www.blackduck.com/).
 ```
 
 The requirement for a copy of the license being included in distributions is fulfilled by a copy of the [LICENSE](./LICENSE) file being included in constructed JAR archives
