@@ -59,10 +59,10 @@ publishing {
                 developers {
                     developer {
                         id = 'blackduckoss'
-                        name = 'Synopsys OSS'
-                        email = 'oss@synopsys.com'
-                        organization = 'Synopsys, Inc.'
-                        organizationUrl = 'http://www.synopsys.com'
+                        name = 'Black Duck OSS'
+                        email = 'bdsoss@blackducksoftware.com'
+                        organization = 'Black Duck Software, Inc.'
+                        organizationUrl = 'https://www.blackduck.com'
                         timezone = 'America/New_York'
                     }
                 }
