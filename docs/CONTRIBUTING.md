@@ -20,7 +20,7 @@ Currently, Eclipse is the supported IDE for development. It is recommended to cr
 
 ### Custom Setup
 
-To run tests, the property `com.blackduck.method.analyzer.test.project.dir` must be set to the file path of the `method-analyzer-test-project` directory in the run/debug settings of TestNG. Executions of the tests from the command line via Gradle are configured with this value automatically.
+To run tests, the property `com.blackducksoftware.method.analyzer.test.project.dir` must be set to the file path of the `method-analyzer-test-project` directory in the run/debug settings of TestNG. Executions of the tests from the command line via Gradle are configured with this value automatically.
 
 
 ## General Standards

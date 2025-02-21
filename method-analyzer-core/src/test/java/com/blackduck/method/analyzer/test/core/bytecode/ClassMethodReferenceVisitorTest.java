@@ -20,7 +20,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.blackduck.method.analyzer.test.core.bytecode;
+package com.blackducksoftware.method.analyzer.test.core.bytecode;
 
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -38,10 +38,10 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.blackduck.method.analyzer.core.bytecode.ClassMethodReferenceVisitor;
-import com.blackduck.method.analyzer.core.model.MethodUse;
-import com.blackduck.method.analyzer.core.model.ReferencedMethod;
-import com.blackduck.method.analyzer.test.core.TestProperties;
+import com.blackducksoftware.method.analyzer.core.bytecode.ClassMethodReferenceVisitor;
+import com.blackducksoftware.method.analyzer.core.model.MethodUse;
+import com.blackducksoftware.method.analyzer.core.model.ReferencedMethod;
+import com.blackducksoftware.method.analyzer.test.core.TestProperties;
 import com.google.common.collect.Multimap;
 
 public class ClassMethodReferenceVisitorTest {
@@ -89,7 +89,7 @@ public class ClassMethodReferenceVisitorTest {
 
         Collection<MethodUse> objectConstructorReferences = result.get(objectConstructorReference);
         Assert.assertEquals(objectConstructorReferences.size(), 1, "Found unexpected number of results: " + objectConstructorReferences);
-        Assert.assertTrue(objectConstructorReferences.contains(new MethodUse("com.blackduck.method.analyzer.test.project.BasicTestClass.<init>", 28)),
+        Assert.assertTrue(objectConstructorReferences.contains(new MethodUse("com.blackducksoftware.method.analyzer.test.project.BasicTestClass.<init>", 28)),
                 "Unexpected reference: " + objectConstructorReferences);
     }
 
@@ -101,7 +101,7 @@ public class ClassMethodReferenceVisitorTest {
 
         Collection<MethodUse> systemPropertyReferences = result.get(systemPropertyReference);
         Assert.assertEquals(systemPropertyReferences.size(), 1, "Found unexpected number of results: " + systemPropertyReferences);
-        Assert.assertTrue(systemPropertyReferences.contains(new MethodUse("com.blackduck.method.analyzer.test.project.BasicTestClass.<init>", 30)),
+        Assert.assertTrue(systemPropertyReferences.contains(new MethodUse("com.blackducksoftware.method.analyzer.test.project.BasicTestClass.<init>", 30)),
                 "Unexpected reference: " + systemPropertyReferences);
     }
 
@@ -112,7 +112,7 @@ public class ClassMethodReferenceVisitorTest {
                 "java.lang.String");
         Collection<MethodUse> stringFormatReferences = result.get(stringFormatReference);
         Assert.assertEquals(stringFormatReferences.size(), 1, "Found unexpected number of results: " + stringFormatReferences);
-        Assert.assertTrue(stringFormatReferences.contains(new MethodUse("com.blackduck.method.analyzer.test.project.BasicTestClass.getThing", 35)),
+        Assert.assertTrue(stringFormatReferences.contains(new MethodUse("com.blackducksoftware.method.analyzer.test.project.BasicTestClass.getThing", 35)),
                 "Unexpected reference: " + stringFormatReferences);
     }
 
@@ -129,7 +129,7 @@ public class ClassMethodReferenceVisitorTest {
         Assert.assertFalse(stringToUpperCaseReferences.isEmpty());
         Assert.assertTrue(
                 stringToUpperCaseReferences.stream()
-                        .allMatch(s -> s.getQualifiedMethodName().startsWith("com.blackduck.method.analyzer.test.project.BasicTestClass.getDynamic")),
+                        .allMatch(s -> s.getQualifiedMethodName().startsWith("com.blackducksoftware.method.analyzer.test.project.BasicTestClass.getDynamic")),
                 "Unexpected reference: " + stringToUpperCaseReferences);
     }
 

@@ -26,4 +26,4 @@
  *
  * @author romeara
  */
-package com.blackduck.method.analyzer.core;
+package com.blackducksoftware.method.analyzer.core;

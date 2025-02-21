@@ -20,7 +20,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.blackduck.method.analyzer.core.bytecode;
+package com.blackducksoftware.method.analyzer.core.bytecode;
 
 import java.util.List;
 import java.util.Objects;
@@ -39,8 +39,8 @@ import org.objectweb.asm.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.blackduck.method.analyzer.core.model.MethodUse;
-import com.blackduck.method.analyzer.core.model.ReferencedMethod;
+import com.blackducksoftware.method.analyzer.core.model.MethodUse;
+import com.blackducksoftware.method.analyzer.core.model.ReferencedMethod;
 import com.google.common.collect.Multimap;
 
 /**

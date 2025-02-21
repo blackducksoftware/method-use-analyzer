@@ -20,7 +20,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.blackduck.method.analyzer.test.core.report;
+package com.blackducksoftware.method.analyzer.test.core.report;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -42,17 +42,17 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.blackduck.method.analyzer.core.model.MethodUse;
-import com.blackduck.method.analyzer.core.model.ReferencedMethod;
-import com.blackduck.method.analyzer.core.report.BrokenFileJson;
-import com.blackduck.method.analyzer.core.report.BrokenFilesReportJson;
-import com.blackduck.method.analyzer.core.report.MetaDataReportJson;
-import com.blackduck.method.analyzer.core.report.MethodIdJson;
-import com.blackduck.method.analyzer.core.report.MethodIdsReportJson;
-import com.blackduck.method.analyzer.core.report.MethodReferencesReportJson;
-import com.blackduck.method.analyzer.core.report.ReferencedMethodUsesJson;
-import com.blackduck.method.analyzer.core.report.ReportGenerator;
-import com.blackduck.method.analyzer.core.report.ReferencedMethodUsesJson.MethodUseJson;
+import com.blackducksoftware.method.analyzer.core.model.MethodUse;
+import com.blackducksoftware.method.analyzer.core.model.ReferencedMethod;
+import com.blackducksoftware.method.analyzer.core.report.BrokenFileJson;
+import com.blackducksoftware.method.analyzer.core.report.BrokenFilesReportJson;
+import com.blackducksoftware.method.analyzer.core.report.MetaDataReportJson;
+import com.blackducksoftware.method.analyzer.core.report.MethodIdJson;
+import com.blackducksoftware.method.analyzer.core.report.MethodIdsReportJson;
+import com.blackducksoftware.method.analyzer.core.report.MethodReferencesReportJson;
+import com.blackducksoftware.method.analyzer.core.report.ReferencedMethodUsesJson;
+import com.blackducksoftware.method.analyzer.core.report.ReportGenerator;
+import com.blackducksoftware.method.analyzer.core.report.ReferencedMethodUsesJson.MethodUseJson;
 import com.google.common.base.Functions;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;

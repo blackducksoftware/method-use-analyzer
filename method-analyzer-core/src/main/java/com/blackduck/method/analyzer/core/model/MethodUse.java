@@ -20,7 +20,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.blackduck.method.analyzer.core.model;
+package com.blackducksoftware.method.analyzer.core.model;
 
 import java.util.Objects;
 import java.util.Optional;

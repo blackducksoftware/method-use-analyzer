@@ -20,7 +20,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.blackduck.method.analyzer.test.core;
+package com.blackducksoftware.method.analyzer.test.core;
 
 /**
  * Represents property keys used within test procedures
@@ -32,6 +32,6 @@ public class TestProperties {
     /**
      * String property which contains a file path to the directory containing a known-quantity test project
      */
-    public static final String TEST_PROJECT_DIRECTORY = "com.blackduck.method.analyzer.test.project.dir";
+    public static final String TEST_PROJECT_DIRECTORY = "com.blackducksoftware.method.analyzer.test.project.dir";
 
 }

@@ -20,7 +20,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.blackduck.method.analyzer.test.core;
+package com.blackducksoftware.method.analyzer.test.core;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -39,12 +39,12 @@ import java.util.zip.ZipInputStream;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.blackduck.method.analyzer.core.MethodUseAnalyzer;
-import com.blackduck.method.analyzer.core.report.MethodIdJson;
-import com.blackduck.method.analyzer.core.report.MethodIdsReportJson;
-import com.blackduck.method.analyzer.core.report.MethodReferencesReportJson;
-import com.blackduck.method.analyzer.core.report.ReferencedMethodUsesJson;
-import com.blackduck.method.analyzer.core.report.ReferencedMethodUsesJson.MethodUseJson;
+import com.blackducksoftware.method.analyzer.core.MethodUseAnalyzer;
+import com.blackducksoftware.method.analyzer.core.report.MethodIdJson;
+import com.blackducksoftware.method.analyzer.core.report.MethodIdsReportJson;
+import com.blackducksoftware.method.analyzer.core.report.MethodReferencesReportJson;
+import com.blackducksoftware.method.analyzer.core.report.ReferencedMethodUsesJson;
+import com.blackducksoftware.method.analyzer.core.report.ReferencedMethodUsesJson.MethodUseJson;
 import com.google.common.base.Functions;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -60,9 +60,9 @@ public class MethodUseAnalyzerTest {
     private static final Multimap<String, MethodUseJson> EXPECTED_USES = HashMultimap.create();
 
     static {
-        EXPECTED_USES.put("java.lang.Object.<init>():void", new MethodUseJson("com.blackduck.method.analyzer.test.project.BasicTestClass.<init>", 28));
+        EXPECTED_USES.put("java.lang.Object.<init>():void", new MethodUseJson("com.blackducksoftware.method.analyzer.test.project.BasicTestClass.<init>", 28));
         EXPECTED_USES.put("java.lang.System.getProperty(java.lang.String):java.lang.String",
-                new MethodUseJson("com.blackduck.method.analyzer.test.project.BasicTestClass.<init>", 30));
+                new MethodUseJson("com.blackducksoftware.method.analyzer.test.project.BasicTestClass.<init>", 30));
     }
 
     @Test

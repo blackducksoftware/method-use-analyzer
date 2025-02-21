@@ -20,7 +20,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.blackduck.method.analyzer.core.report;
+package com.blackducksoftware.method.analyzer.core.report;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
-import com.blackduck.method.analyzer.core.model.ReferencedMethod;
+import com.blackducksoftware.method.analyzer.core.model.ReferencedMethod;
 import com.google.common.base.MoreObjects;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;

@@ -20,7 +20,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.blackduck.method.analyzer.test.project;
+package com.blackducksoftware.method.analyzer.test.project;
 
 import java.util.Collections;
 import java.util.stream.Collectors;

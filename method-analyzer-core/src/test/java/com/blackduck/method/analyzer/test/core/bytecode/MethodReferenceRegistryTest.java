@@ -20,7 +20,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.blackduck.method.analyzer.test.core.bytecode;
+package com.blackducksoftware.method.analyzer.test.core.bytecode;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -28,9 +28,9 @@ import java.util.Collections;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.blackduck.method.analyzer.core.bytecode.MethodReferenceRegistry;
-import com.blackduck.method.analyzer.core.model.MethodUse;
-import com.blackduck.method.analyzer.core.model.ReferencedMethod;
+import com.blackducksoftware.method.analyzer.core.bytecode.MethodReferenceRegistry;
+import com.blackducksoftware.method.analyzer.core.model.MethodUse;
+import com.blackducksoftware.method.analyzer.core.model.ReferencedMethod;
 import com.google.common.collect.Multimap;
 
 public class MethodReferenceRegistryTest {

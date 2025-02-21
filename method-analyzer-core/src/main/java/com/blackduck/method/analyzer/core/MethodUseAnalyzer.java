@@ -20,7 +20,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.blackduck.method.analyzer.core;
+package com.blackducksoftware.method.analyzer.core;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,10 +40,10 @@ import org.objectweb.asm.ClassReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.blackduck.method.analyzer.core.bytecode.ClassMethodReferenceVisitor;
-import com.blackduck.method.analyzer.core.model.MethodUse;
-import com.blackduck.method.analyzer.core.model.ReferencedMethod;
-import com.blackduck.method.analyzer.core.report.ReportGenerator;
+import com.blackducksoftware.method.analyzer.core.bytecode.ClassMethodReferenceVisitor;
+import com.blackducksoftware.method.analyzer.core.model.MethodUse;
+import com.blackducksoftware.method.analyzer.core.model.ReferencedMethod;
+import com.blackducksoftware.method.analyzer.core.report.ReportGenerator;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Multimap;
