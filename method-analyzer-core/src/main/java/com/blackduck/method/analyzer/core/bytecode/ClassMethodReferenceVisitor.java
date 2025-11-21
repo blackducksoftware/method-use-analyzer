@@ -221,12 +221,12 @@ public class ClassMethodReferenceVisitor extends ClassVisitor {
 
                 try {
                     return Type.getType(descriptor);
-                } catch (StringIndexOutOfBoundsException e2) {
+                } catch (StringIndexOutOfBoundsException | IllegalArgumentException e2) {
                     // IDETECT-3909 This can occur for malformed signatures which are just the type, not the method, for
                     // an unknown reason
                     logger.warn("Malformed method descriptor, skipping reference processing: {}:{} ({})", currentClassName, currentMethodName, descriptor);
 
-                    return Type.getType(descriptor);
+                    return Type.getType(Object.class);
                 }
             }
         }

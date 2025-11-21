@@ -138,6 +138,9 @@ public class MethodUseAnalyzer {
                     } else {
                         throw e;
                     }
+                } catch (IndexOutOfBoundsException | ClassFormatError | NegativeArraySizeException | OutOfMemoryError e) {
+                    //IDETECT-4924 Handle malformed classes properly
+                    brokenFiles.put(classFile, "Malformed class structure: " + Strings.nullToEmpty(e.getMessage()));
                 }
             }
 
