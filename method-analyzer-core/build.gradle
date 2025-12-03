@@ -1,6 +1,5 @@
 plugins{
     id 'maven-publish'
-    id 'de.marcphilipp.nexus-publish' version "0.4.0"
 }
 
 description = 'Library which analyzes Java projects for method calls to external methods'
