@@ -74,3 +74,57 @@ publishing {
         }
     }
 }
+
+
+// Force checksum generation
+// Generate checksums after publishing
+tasks.register('generateChecksums') {
+    dependsOn 'publishMavenPublicationToMavenLocal'
+
+    doLast {
+        // Get the local maven repository path
+        def userHome = System.getProperty('user.home')
+        def localRepoPath = "${userHome}/.m2/repository"
+        def groupPath = project.group.toString().replace('.', '/')
+        def artifactDir = new File("${localRepoPath}/${groupPath}/${project.name}/${project.version}")
+
+        println "Generating checksums in: ${artifactDir.absolutePath}"
+
+        if (artifactDir.exists()) {
+            artifactDir.listFiles().findAll { file ->
+                file.isFile() &&
+                        (file.name.endsWith('.jar') || file.name.endsWith('.pom')) &&
+                        !file.name.contains('maven-metadata')
+            }.each { file ->
+                generateChecksumsFor(file)
+            }
+        }
+    }
+}
+
+def generateChecksumsFor(File file) {
+    // Generate MD5
+    def md5File = new File(file.parentFile, "${file.name}.md5")
+    if (!md5File.exists()) {
+        def md5 = java.security.MessageDigest.getInstance('MD5')
+        file.eachByte(8192) { buffer, length ->
+            md5.update(buffer, 0, length)
+        }
+        md5File.text = md5.digest().collect { String.format('%02x', it & 0xff) }.join()
+        println "Generated MD5 for ${file.name}"
+    }
+
+    // Generate SHA1
+    def sha1File = new File(file.parentFile, "${file.name}.sha1")
+    if (!sha1File.exists()) {
+        def sha1 = java.security.MessageDigest.getInstance('SHA-1')
+        file.eachByte(8192) { buffer, length ->
+            sha1.update(buffer, 0, length)
+        }
+        sha1File.text = sha1.digest().collect { String.format('%02x', it & 0xff) }.join()
+        println "Generated SHA1 for ${file.name}"
+    }
+}
+
+// Chain the tasks
+publishToMavenLocal.finalizedBy generateChecksums
