@@ -78,26 +78,34 @@ publishing {
 
 // Force checksum generation
 // Generate checksums after publishing
-tasks.register('generateChecksums') {
+// Generate checksums and cleanup maven metadata after publishing
+tasks.register('generateChecksumsAndCleanup') {
     dependsOn 'publishMavenPublicationToMavenLocal'
 
     doLast {
-        // Get the local maven repository path
         def userHome = System.getProperty('user.home')
         def localRepoPath = "${userHome}/.m2/repository"
         def groupPath = project.group.toString().replace('.', '/')
         def artifactDir = new File("${localRepoPath}/${groupPath}/${project.name}/${project.version}")
+        def artifactParentDir = new File("${localRepoPath}/${groupPath}/${project.name}")
 
-        println "Generating checksums in: ${artifactDir.absolutePath}"
+        println "Processing ${project.name} in: ${artifactDir.absolutePath}"
 
         if (artifactDir.exists()) {
+            // Generate checksums for all relevant files
             artifactDir.listFiles().findAll { file ->
                 file.isFile() &&
-                        (file.name.endsWith('.jar') || file.name.endsWith('.pom')) &&
-                        !file.name.contains('maven-metadata')
+                        (file.name.endsWith('.jar') || file.name.endsWith('.pom') || file.name.endsWith('.module')) &&
+                        !file.name.contains('maven-metadata') &&
+                        !file.name.endsWith('.asc') &&        // Skip signature files
+                        !file.name.endsWith('.md5') &&        // Skip existing checksums
+                        !file.name.endsWith('.sha1')          // Skip existing checksums
             }.each { file ->
                 generateChecksumsFor(file)
             }
+
+            // Clean up maven-metadata-local.xml files
+            cleanupMavenMetadata(artifactDir, artifactParentDir)
         }
     }
 }
@@ -126,5 +134,21 @@ def generateChecksumsFor(File file) {
     }
 }
 
+def cleanupMavenMetadata(File versionDir, File artifactDir) {
+    // Delete maven-metadata-local.xml from version directory (e.g., 1.0.7-SNAPSHOT/)
+    def versionMetadataFile = new File(versionDir, 'maven-metadata-local.xml')
+    if (versionMetadataFile.exists()) {
+        boolean deleted = versionMetadataFile.delete()
+        println "Deleted maven-metadata-local.xml from version directory: ${deleted ? 'SUCCESS' : 'FAILED'}"
+    }
+
+    // Delete maven-metadata-local.xml from artifact directory (e.g., method-analyzer-core/)
+    def artifactMetadataFile = new File(artifactDir, 'maven-metadata-local.xml')
+    if (artifactMetadataFile.exists()) {
+        boolean deleted = artifactMetadataFile.delete()
+        println "Deleted maven-metadata-local.xml from artifact directory: ${deleted ? 'SUCCESS' : 'FAILED'}"
+    }
+}
+
 // Chain the tasks
-publishToMavenLocal.finalizedBy generateChecksums
+publishToMavenLocal.finalizedBy generateChecksumsAndCleanup
